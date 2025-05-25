@@ -1,23 +1,22 @@
 from fastapi import APIRouter, UploadFile, File
+from services import pdf_parser
 
 router = APIRouter()
 
 @router.post("/upload")
 async def upload_resume(file: UploadFile = File(...)):
     """
-    Upload a PDF resume file and return basic file metadata.
+    Upload a resume PDF and extract its text content using PyMuPDF.
 
     Parameters:
-    - file (UploadFile): The PDF file sent by the user.
+    - file (UploadFile): The uploaded resume file.
 
     Returns:
-    - dict: Dictionary containing filename and file size in bytes.
+    - dict: Contains extracted text from the PDF.
     """
-    # Read the uploaded file content as bytes
     content = await file.read()
-
-    # Return filename and size of the uploaded file
+    extracted_text = pdf_parser.extract_text_from_pdf(content)
     return {
         "filename": file.filename,
-        "size": len(content)
+        "text": extracted_text
     }
