@@ -1,7 +1,7 @@
 # FastAPI main app entry point
 
 from fastapi import FastAPI
-from routes import upload
+from app.routes import upload
 
 app = FastAPI()
 

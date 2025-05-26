@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File
-from services import pdf_parser, gpt_feedback
+from app.services import pdf_parser, gpt_feedback
 
 router = APIRouter()
 
