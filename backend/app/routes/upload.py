@@ -20,6 +20,6 @@ async def upload_resume(file: UploadFile = File(...)):
 
     return {
         "filename": file.filename,
-        "text": extracted_text,
+        "resume_text": extracted_text,
         "gpt_feedback": feedback
     }
