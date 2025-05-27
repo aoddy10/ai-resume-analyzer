@@ -1,32 +1,89 @@
 # 🧠 AI Resume Analyzer
 
-A GPT-powered application that analyzes resumes, extracts skills, matches job descriptions, and provides improvement suggestions — all through natural language generation.
+A GPT-powered application that analyzes resumes, matches them against job descriptions, and provides improvement suggestions — using semantic search and natural language generation.
 
-![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20LangChain%20%7C%20OpenAI%20%7C%20React-blue)
+![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20OpenAI%20%7C%20TfidfVectorizer%20%7C%20Docker-blue)
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
 
 ---
 
 ## 🚀 Features
 
-- 📄 Upload PDF resumes with drag-and-drop
-- 🔍 Extract skills, experience, and education using NLP
-- 📊 Match resume against job descriptions and calculate a score
-- ✨ Get GPT-powered feedback on areas for improvement
-- 💬 Natural language interface for querying resume content
+-   📄 Upload PDF resumes
+-   🔍 Extract skills, experience, and education using NLP
+-   📊 Match resume against job descriptions and calculate a similarity score
+-   ✨ Get GPT-powered suggestions to improve resume for specific JD
+-   🧪 Fully tested backend with mocked GPT feedback
+-   📦 Dockerized backend service (frontend coming soon)
 
 ---
 
 ## 🧱 Tech Stack
 
-| Layer        | Tech                         |
-|--------------|-------------------------------|
-| Backend      | FastAPI, LangChain, OpenAI GPT-4 |
-| Frontend     | Next.js, TailwindCSS, ShadCN UI |
-| Parsing      | PyMuPDF, pdfplumber           |
-| Storage      | PostgreSQL + PGVector / FAISS |
-| Auth         | Clerk.dev (Optional)          |
-| Container    | Docker + Docker Compose       |
+| Layer     | Tech                                             |
+| --------- | ------------------------------------------------ |
+| Backend   | FastAPI, Python                                  |
+| AI        | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity |
+| Parsing   | PyMuPDF                                          |
+| Testing   | Pytest, Monkeypatch, TestClient                  |
+| Container | Docker + Docker Compose                          |
+
+---
+
+## 📎 API Endpoints
+
+### `POST /api/upload`
+
+Upload a resume (PDF), parse content, and get GPT feedback.
+
+**FormData**:
+
+-   `file`: PDF resume
+
+**Response**:
+
+```json
+{
+    "filename": "resume.pdf",
+    "resume_text": "...",
+    "gpt_feedback": "- Add more backend experience..."
+}
+```
+
+---
+
+### `POST /api/match`
+
+Match resume against a job description and receive suggestions.
+
+**FormData**:
+
+-   `resume`: PDF resume
+-   `jd_text`: Job description (text)
+
+**Response**:
+
+```json
+{
+    "match_score": 84.67,
+    "suggestions": "- Emphasize FastAPI experience"
+}
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+pytest
+```
+
+Tests include:
+
+-   PDF parser validation
+-   GPT feedback with monkeypatch
+-   JD matching and score accuracy
+-   Full upload & match flow
 
 ---
 
@@ -39,11 +96,8 @@ ai-resume-analyzer/
 │   │   ├── main.py
 │   │   ├── routes/
 │   │   ├── services/
+│   │   ├── tests/
 │   │   └── utils/
-├── frontend/
-│   ├── pages/
-│   ├── components/
-│   └── public/
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
@@ -51,7 +105,7 @@ ai-resume-analyzer/
 
 ---
 
-## 🧪 Local Setup
+## 🛠 Local Setup
 
 ```bash
 git clone https://github.com/aoddy10/ai-resume-analyzer.git
@@ -59,23 +113,7 @@ cd ai-resume-analyzer
 docker-compose up --build
 ```
 
-> ✏️ Copy `.env.example` → `.env` and add your OpenAI API key, database URL, etc.
-
----
-
-## 🛣️ Roadmap
-
-- [x] PDF Upload + Parsing
-- [ ] JD Upload + Embedding Matching
-- [ ] GPT Feedback Module
-- [ ] Resume Visual Summary (Optional)
-- [ ] Deploy to Railway / Fly.io
-
----
-
-## 📸 Screenshots
-
-> (Add demo images here showing resume input and feedback output)
+> ✏️ Copy `.env.example` → `.env` and add your OpenAI API key, etc.
 
 ---
 
