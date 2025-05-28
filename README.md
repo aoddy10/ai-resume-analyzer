@@ -3,7 +3,7 @@
 A GPT-powered application that analyzes resumes, matches them against job descriptions, and provides improvement suggestions — using semantic search and natural language generation.
 
 ![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20OpenAI%20%7C%20TfidfVectorizer%20%7C%20Docker-blue)
-![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
+![Status](https://img.shields.io/badge/Status-Backend%20%2B%20Frontend%20Core%20Completed-yellow)
 
 ---
 
@@ -14,19 +14,21 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 -   📊 Match resume against job descriptions and calculate a similarity score
 -   ✨ Get GPT-powered suggestions to improve resume for specific JD
 -   🧪 Fully tested backend with mocked GPT feedback
--   📦 Dockerized backend service (frontend coming soon)
+-   💻 Modern, responsive frontend with Hero, Features, and Resume Upload sections
+-   📦 Dockerized backend and frontend with shared environment support
 
 ---
 
 ## 🧱 Tech Stack
 
-| Layer     | Tech                                             |
-| --------- | ------------------------------------------------ |
-| Backend   | FastAPI, Python                                  |
-| AI        | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity |
-| Parsing   | PyMuPDF                                          |
-| Testing   | Pytest, Monkeypatch, TestClient                  |
-| Container | Docker + Docker Compose                          |
+| Layer     | Tech                                                    |
+| --------- | ------------------------------------------------------- |
+| Frontend  | Next.js, TypeScript, Tailwind CSS, ShadCN, Lucide Icons |
+| Backend   | FastAPI, Python                                         |
+| AI        | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity        |
+| Parsing   | PyMuPDF                                                 |
+| Testing   | Pytest, Monkeypatch, TestClient                         |
+| Container | Docker + Docker Compose                                 |
 
 ---
 
@@ -98,6 +100,11 @@ ai-resume-analyzer/
 │   │   ├── services/
 │   │   ├── tests/
 │   │   └── utils/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── styles/
+│   │   └── pages/
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
@@ -111,6 +118,7 @@ ai-resume-analyzer/
 git clone https://github.com/aoddy10/ai-resume-analyzer.git
 cd ai-resume-analyzer
 docker-compose up --build
+# Access the frontend at http://localhost:3000
 ```
 
 > ✏️ Copy `.env.example` → `.env` and add your OpenAI API key, etc.
