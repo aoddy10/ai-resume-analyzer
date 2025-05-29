@@ -1,12 +1,15 @@
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
+    preset: "ts-jest",
     testEnvironment: "jsdom",
-    setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     moduleNameMapper: {
         "^@/(.*)$": "<rootDir>/src/$1",
     },
     transform: {
-        "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+        "^.+\\.(ts|tsx)$": "ts-jest",
     },
-    transformIgnorePatterns: ["/node_modules/(?!(lucide-react|@radix-ui)/)"],
-    testPathIgnorePatterns: ["/node_modules/", "/.next/"],
+    moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };
+
+module.exports = config;
