@@ -4,6 +4,13 @@ import React, { useState, useRef } from "react";
 import { uploadResume } from "@/api/upload";
 import useAxios from "@/hooks/useAxios";
 import { AxiosProgressEvent } from "axios";
+import { Progress } from "./ui/progress";
+
+type FeedbackDataProps = {
+    filename: string;
+    resume_text: string;
+    gpt_feedback: string;
+};
 
 export default function ResumeUpload() {
     const axiosInstance = useAxios();
@@ -13,7 +20,9 @@ export default function ResumeUpload() {
     const [dragActive, setDragActive] = useState(false);
     const [progress, setProgress] = useState<number>(0);
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-    const [feedbackData, setFeedbackData] = useState<string>("");
+    const [feedbackData, setFeedbackData] = useState<FeedbackDataProps | null>(
+        null
+    );
 
     const formRef = useRef<HTMLFormElement>(null);
     const dropRef = useRef<HTMLDivElement>(null);
@@ -56,7 +65,7 @@ export default function ResumeUpload() {
         }
         setIsLoading(true);
         setProgress(0);
-        setFeedbackData("");
+        setFeedbackData(null);
         try {
             const result = await uploadResume(axiosInstance, {
                 file,
@@ -69,11 +78,8 @@ export default function ResumeUpload() {
                     }
                 },
             });
-
-            if (result?.gpt_feedback) {
-                const feedbackText = result.gpt_feedback;
-
-                setFeedbackData(feedbackText);
+            if (result) {
+                setFeedbackData(result);
                 setMessage("Upload and analysis completed successfully");
             } else {
                 throw new Error("Parsing failed");
@@ -109,6 +115,9 @@ export default function ResumeUpload() {
                         onSubmit={handleSubmit}
                         className="bg-white p-6 rounded-xl shadow-md"
                     >
+                        <h3 className="text-xl font-semibold mb-4">
+                            Please select a PDF file
+                        </h3>
                         <input
                             data-testid="file-input"
                             type="file"
@@ -122,14 +131,7 @@ export default function ResumeUpload() {
                         >
                             Submit
                         </button>
-                        {file && !message.includes("Please select") && (
-                            <p
-                                className="mt-2 text-sm text-gray-900"
-                                data-testid="file-name"
-                            >
-                                {file.name}
-                            </p>
-                        )}
+
                         {message && (
                             <p
                                 className="mt-4 text-sm text-gray-700"
@@ -141,24 +143,38 @@ export default function ResumeUpload() {
                     </form>
                 </div>
                 {isLoading && (
-                    <p
-                        className="text-blue-600"
-                        data-testid="loading-indicator"
-                    >
-                        Uploading...
-                    </p>
-                )}
-                {isLoading && (
-                    <div className="w-full mt-4" data-testid="upload-progress">
-                        <div className="bg-gray-300 h-2 rounded">
-                            <div
-                                className="bg-blue-600 h-2 rounded"
-                                style={{ width: `${progress}%` }}
-                            ></div>
-                        </div>
-                        <p className="text-sm text-center mt-1">{progress}%</p>
+                    <div className="my-6">
+                        <p
+                            className="text-blue-600 flex gap-2"
+                            data-testid="loading-indicator"
+                        >
+                            <svg
+                                className="animate-spin h-5 w-5 text-blue-600"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                role="status"
+                            >
+                                <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                ></circle>
+                                <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                ></path>
+                            </svg>
+                            <span>Uploading and waiting for feedback...</span>
+                        </p>
+                        <Progress value={progress} />
                     </div>
                 )}
+
                 {pdfUrl && (
                     <div className="mt-6" data-testid="pdf-preview">
                         <iframe
@@ -177,11 +193,18 @@ export default function ResumeUpload() {
                         data-testid="parsed-data"
                     >
                         <h3 className="text-xl font-semibold mb-2">
-                            Feedback Resume Data
+                            Resume Analysis Result
                         </h3>
-                        <pre className="text-sm whitespace-pre-wrap">
-                            {feedbackData}
-                        </pre>
+                        <p className="text-sm text-gray-800">
+                            <strong>Filename:</strong> {feedbackData.filename}
+                        </p>
+
+                        <div className="mt-2">
+                            <h4 className="font-semibold">AI Feedback</h4>
+                            <pre className="text-sm whitespace-pre-wrap">
+                                {feedbackData.gpt_feedback}
+                            </pre>
+                        </div>
                     </div>
                 )}
             </div>
