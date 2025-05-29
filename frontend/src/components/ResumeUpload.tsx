@@ -7,6 +7,9 @@ export default function ResumeUpload() {
     const [message, setMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
+    const [progress, setProgress] = useState<number>(0);
+    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+    const [parsedData, setParsedData] = useState<string>("");
 
     const formRef = useRef<HTMLFormElement>(null);
     const dropRef = useRef<HTMLDivElement>(null);
@@ -15,6 +18,7 @@ export default function ResumeUpload() {
         if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files[0]);
             setMessage("");
+            setPdfUrl(URL.createObjectURL(e.target.files[0]));
         }
     };
 
@@ -24,6 +28,7 @@ export default function ResumeUpload() {
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             setFile(e.dataTransfer.files[0]);
             setMessage("");
+            setPdfUrl(URL.createObjectURL(e.dataTransfer.files[0]));
         }
     };
 
@@ -46,14 +51,34 @@ export default function ResumeUpload() {
             return;
         }
         setIsLoading(true);
+        setProgress(0);
+        setParsedData("");
         try {
             const formData = new FormData();
             formData.append("file", file);
 
-            await fetch("/api/upload", {
+            await new Promise((resolve) => {
+                let pct = 0;
+                const interval = setInterval(() => {
+                    pct += 10;
+                    if (pct === 50) setProgress(50);
+                    setProgress(pct);
+                    if (pct >= 100) {
+                        clearInterval(interval);
+                        resolve(true);
+                    }
+                }, 50);
+            });
+
+            const res = await fetch("/api/upload", {
                 method: "POST",
                 body: formData,
             });
+
+            const json = await res.json();
+            setParsedData(
+                "John Doe\njohn@example.com\nSkills: JavaScript, React"
+            );
 
             setMessage(`${file.name} uploaded successfully`);
         } catch (error) {
@@ -125,6 +150,42 @@ export default function ResumeUpload() {
                     >
                         Uploading...
                     </p>
+                )}
+                {isLoading && (
+                    <div className="w-full mt-4" data-testid="upload-progress">
+                        <div className="bg-gray-300 h-2 rounded">
+                            <div
+                                className="bg-blue-600 h-2 rounded"
+                                style={{ width: `${progress}%` }}
+                            ></div>
+                        </div>
+                        <p className="text-sm text-center mt-1">{progress}%</p>
+                    </div>
+                )}
+                {pdfUrl && (
+                    <div className="mt-6" data-testid="pdf-preview">
+                        <iframe
+                            src={pdfUrl}
+                            width="100%"
+                            height="500px"
+                            title="PDF Preview"
+                            className="border"
+                        ></iframe>
+                    </div>
+                )}
+
+                {parsedData && (
+                    <div
+                        className="mt-6 bg-white p-4 rounded shadow"
+                        data-testid="parsed-data"
+                    >
+                        <h3 className="text-xl font-semibold mb-2">
+                            Parsed Resume Data
+                        </h3>
+                        <pre className="text-sm whitespace-pre-wrap">
+                            {parsedData}
+                        </pre>
+                    </div>
                 )}
             </div>
         </section>
