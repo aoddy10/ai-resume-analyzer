@@ -16,6 +16,8 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 -   🧪 Fully tested backend with mocked GPT feedback
 -   💻 Modern, responsive frontend with Hero, Features, and Resume Upload sections
 -   📦 Dockerized backend and frontend with shared environment support
+-   📤 Show real-time progress bar and loading state during file upload
+-   🧾 Preview uploaded PDF and display GPT feedback from backend
 
 ---
 
@@ -36,7 +38,8 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ### `POST /api/upload`
 
-Upload a resume (PDF), parse content, and get GPT feedback.
+Upload a resume (PDF), parse content, and get GPT feedback.  
+Also returns extracted resume text and displays it in the frontend UI.
 
 **FormData**:
 
@@ -46,9 +49,9 @@ Upload a resume (PDF), parse content, and get GPT feedback.
 
 ```json
 {
-    "filename": "resume.pdf",
-    "resume_text": "...",
-    "gpt_feedback": "- Add more backend experience..."
+    "filename": "Anirut_Puangkingkaew_Resume.pdf",
+    "resume_text": "Anirut Puangkingkaew\nEmail: anirut.puangkingkaew@gmail.com...",
+    "gpt_feedback": "Strengths of the resume:\n- The resume is highly detailed...\n\nAreas for improvement:\n- The resume could benefit from a more structured layout..."
 }
 ```
 
