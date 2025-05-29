@@ -1,15 +1,19 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
+import { uploadResume } from "@/api/upload";
+import useAxios from "@/hooks/useAxios";
+import { AxiosProgressEvent } from "axios";
 
 export default function ResumeUpload() {
+    const axiosInstance = useAxios();
     const [file, setFile] = useState<File | null>(null);
     const [message, setMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
     const [progress, setProgress] = useState<number>(0);
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-    const [parsedData, setParsedData] = useState<string>("");
+    const [feedbackData, setFeedbackData] = useState<string>("");
 
     const formRef = useRef<HTMLFormElement>(null);
     const dropRef = useRef<HTMLDivElement>(null);
@@ -52,35 +56,28 @@ export default function ResumeUpload() {
         }
         setIsLoading(true);
         setProgress(0);
-        setParsedData("");
+        setFeedbackData("");
         try {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            await new Promise((resolve) => {
-                let pct = 0;
-                const interval = setInterval(() => {
-                    pct += 10;
-                    if (pct === 50) setProgress(50);
-                    setProgress(pct);
-                    if (pct >= 100) {
-                        clearInterval(interval);
-                        resolve(true);
+            const result = await uploadResume(axiosInstance, {
+                file,
+                onUploadProgress: (event: AxiosProgressEvent) => {
+                    if (event.total && event.total > 0) {
+                        const percent = Math.round(
+                            (event.loaded * 100) / event.total
+                        );
+                        setProgress(percent);
                     }
-                }, 50);
+                },
             });
 
-            const res = await fetch("/api/upload", {
-                method: "POST",
-                body: formData,
-            });
+            if (result?.gpt_feedback) {
+                const feedbackText = result.gpt_feedback;
 
-            const json = await res.json();
-            setParsedData(
-                "John Doe\njohn@example.com\nSkills: JavaScript, React"
-            );
-
-            setMessage(`${file.name} uploaded successfully`);
+                setFeedbackData(feedbackText);
+                setMessage("Upload and analysis completed successfully");
+            } else {
+                throw new Error("Parsing failed");
+            }
         } catch (error) {
             setMessage("Upload failed");
         } finally {
@@ -174,16 +171,16 @@ export default function ResumeUpload() {
                     </div>
                 )}
 
-                {parsedData && (
+                {feedbackData && (
                     <div
                         className="mt-6 bg-white p-4 rounded shadow"
                         data-testid="parsed-data"
                     >
                         <h3 className="text-xl font-semibold mb-2">
-                            Parsed Resume Data
+                            Feedback Resume Data
                         </h3>
                         <pre className="text-sm whitespace-pre-wrap">
-                            {parsedData}
+                            {feedbackData}
                         </pre>
                     </div>
                 )}
