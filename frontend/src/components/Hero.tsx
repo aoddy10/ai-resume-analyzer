@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Hero() {
     return (
@@ -14,7 +15,9 @@ export default function Hero() {
                     identify gaps, and score job matches instantly.
                 </p>
                 <div className="mt-8 flex justify-center gap-4 flex-wrap">
-                    <Button size="lg">Try the Demo</Button>
+                    <Link href="/analyzer">
+                        <Button size="lg">Try the Demo</Button>
+                    </Link>
                     <Button variant="outline" size="lg">
                         Learn More
                     </Button>

@@ -5,6 +5,9 @@ import { uploadResume } from "@/api/upload";
 import useAxios from "@/hooks/useAxios";
 import { AxiosProgressEvent } from "axios";
 import { Progress } from "./ui/progress";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 type FeedbackDataProps = {
     filename: string;
@@ -12,7 +15,11 @@ type FeedbackDataProps = {
     gpt_feedback: string;
 };
 
-export default function ResumeUpload() {
+interface ResumeUploadProps {
+    onUploadSuccess?: (resumeText: string, gptFeedback: string) => void;
+}
+
+export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
     const axiosInstance = useAxios();
     const [file, setFile] = useState<File | null>(null);
     const [message, setMessage] = useState<string>("");
@@ -81,6 +88,9 @@ export default function ResumeUpload() {
             if (result) {
                 setFeedbackData(result);
                 setMessage("Upload and analysis completed successfully");
+                if (onUploadSuccess) {
+                    onUploadSuccess(result.resume_text, result.gpt_feedback);
+                }
             } else {
                 throw new Error("Parsing failed");
             }
@@ -113,31 +123,25 @@ export default function ResumeUpload() {
                     <form
                         ref={formRef}
                         onSubmit={handleSubmit}
-                        className="bg-white p-6 rounded-xl shadow-md"
+                        className="bg-white p-6 rounded-xl shadow-md flex flex-col gap-4 items-start"
                     >
-                        <h3 className="text-xl font-semibold mb-4">
-                            Please select a PDF file
-                        </h3>
-                        <input
+                        <Label>Please select a PDF file</Label>
+
+                        <Input
                             data-testid="file-input"
                             type="file"
                             accept="application/pdf"
                             onChange={handleFileChange}
-                            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 mb-4"
                         />
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                        >
-                            Submit
-                        </button>
+
+                        <Button size="lg">Submit</Button>
 
                         {message && (
                             <p
                                 className="mt-4 text-sm text-gray-700"
                                 data-testid="upload-message"
                             >
-                                {message}
+                                * {message}
                             </p>
                         )}
                     </form>
@@ -171,7 +175,7 @@ export default function ResumeUpload() {
                             </svg>
                             <span>Uploading and waiting for feedback...</span>
                         </p>
-                        <Progress value={progress} />
+                        <Progress value={progress} className="text-blue-600" />
                     </div>
                 )}
 
@@ -187,7 +191,7 @@ export default function ResumeUpload() {
                     </div>
                 )}
 
-                {feedbackData && (
+                {/* {feedbackData && (
                     <div
                         className="mt-6 bg-white p-4 rounded shadow"
                         data-testid="parsed-data"
@@ -206,7 +210,7 @@ export default function ResumeUpload() {
                             </pre>
                         </div>
                     </div>
-                )}
+                )} */}
             </div>
         </section>
     );
