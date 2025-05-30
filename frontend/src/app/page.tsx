@@ -1,5 +1,6 @@
 import Feature from "@/components/Feature";
 import Hero from "@/components/Hero";
+
 import ResumeUpload from "@/components/ResumeUpload";
 
 export default function Home() {
