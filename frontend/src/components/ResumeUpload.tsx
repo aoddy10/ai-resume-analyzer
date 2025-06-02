@@ -17,7 +17,7 @@ import {
     CardContent,
     CardDescription,
 } from "@/components/ui/card";
-import { AlertTriangle, InfoIcon } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 type FeedbackDataProps = {
     filename: string;

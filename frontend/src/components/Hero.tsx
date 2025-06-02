@@ -16,7 +16,7 @@ export default function Hero() {
                 </p>
                 <div className="mt-8 flex justify-center gap-4 flex-wrap">
                     <Link href="/analyzer">
-                        <Button size="lg">Try the Demo</Button>
+                        <Button size="lg">Try resume analyzer</Button>
                     </Link>
                     <Button variant="outline" size="lg">
                         Learn More
