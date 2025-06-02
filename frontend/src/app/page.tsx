@@ -1,5 +1,6 @@
 import Feature from "@/components/Feature";
 import Hero from "@/components/Hero";
+import ScreenshotSection from "@/components/ScreenshotSection";
 
 export default function Home() {
     return (
@@ -8,6 +9,8 @@ export default function Home() {
                 <Hero />
 
                 <Feature />
+
+                <ScreenshotSection />
             </main>
         </div>
     );
