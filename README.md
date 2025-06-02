@@ -1,4 +1,4 @@
-# 🧠 AI Resume Analyzer
+# AI Resume Analyzer
 
 A GPT-powered application that analyzes resumes, matches them against job descriptions, and provides improvement suggestions — using semantic search and natural language generation.
 
@@ -7,7 +7,21 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ---
 
-## 🚀 Features
+---
+
+## Screenshot Preview
+
+Here's a quick look at the Resume Analyzer in action:
+
+<div style="display: flex; gap: 10px;">
+  <img src="frontend/public/screenshots/step1-upload-resume.png" alt="Step 1" width="250"/>
+  <img src="frontend/public/screenshots/step2-get-resume-feedback.png" alt="Step 2" width="250"/>
+  <img src="frontend/public/screenshots/step3-get-gap-feedback.png" alt="Step 3" width="250"/>
+</div>
+
+---
+
+## Features
 
 -   📄 Upload PDF resumes
 -   🔍 Extract skills, experience, and education using NLP
@@ -22,7 +36,7 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 | Layer     | Tech                                                    |
 | --------- | ------------------------------------------------------- |
@@ -35,7 +49,7 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ---
 
-## 📎 API Endpoints
+## API Endpoints
 
 ### `POST /api/upload`
 
@@ -78,7 +92,7 @@ Match resume against a job description and receive suggestions.
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 ```bash
 pytest
@@ -93,7 +107,7 @@ Tests include:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ai-resume-analyzer/
@@ -116,7 +130,7 @@ ai-resume-analyzer/
 
 ---
 
-## 🛠 Local Setup
+## Local Setup
 
 ```bash
 git clone https://github.com/aoddy10/ai-resume-analyzer.git
@@ -129,6 +143,6 @@ docker-compose up --build
 
 ---
 
-## 📄 License
+## License
 
 MIT License © 2025 Anirut Puangkingkaew
