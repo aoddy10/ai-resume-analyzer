@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ChevronLeft, FileText } from "lucide-react";
+import Link from "next/link";
 
 export default function ResumeAnalyzerPage() {
     const [step, setStep] = useState(1);
@@ -20,6 +21,15 @@ export default function ResumeAnalyzerPage() {
 
     return (
         <main className="max-w-4xl mx-auto py-10 px-4 space-y-6">
+            <div className="mb-4">
+                <Link
+                    href="/"
+                    className="inline-flex items-center text-sm text-blue-600 hover:underline"
+                >
+                    <ChevronLeft className="mr-1 h-4 w-4" />
+                    Back to Home
+                </Link>
+            </div>
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
