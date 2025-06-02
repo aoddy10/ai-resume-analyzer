@@ -1,4 +1,4 @@
-# 🧠 AI Resume Analyzer
+# AI Resume Analyzer
 
 A GPT-powered application that analyzes resumes, matches them against job descriptions, and provides improvement suggestions — using semantic search and natural language generation.
 
@@ -7,12 +7,27 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ---
 
-## 🚀 Features
+---
+
+## Screenshot Preview
+
+Here's a quick look at the Resume Analyzer in action:
+
+<div style="display: flex; gap: 10px;">
+  <img src="frontend/public/screenshots/step1-upload-resume.png" alt="Step 1" width="250"/>
+  <img src="frontend/public/screenshots/step2-get-resume-feedback.png" alt="Step 2" width="250"/>
+  <img src="frontend/public/screenshots/step3-get-gap-feedback.png" alt="Step 3" width="250"/>
+</div>
+
+---
+
+## Features
 
 -   📄 Upload PDF resumes
 -   🔍 Extract skills, experience, and education using NLP
--   📊 Match resume against job descriptions and calculate a similarity score
--   ✨ Get GPT-powered suggestions to improve resume for specific JD
+-   📊 Match resume against job descriptions with similarity scoring
+-   ✨ Get GPT-powered suggestions and GAP feedback for better alignment with job descriptions
+-   📁 Upload JD and resume for AI-based compatibility matching
 -   🧪 Fully tested backend with mocked GPT feedback
 -   💻 Modern, responsive frontend with Hero, Features, and Resume Upload sections
 -   📦 Dockerized backend and frontend with shared environment support
@@ -21,7 +36,7 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 | Layer     | Tech                                                    |
 | --------- | ------------------------------------------------------- |
@@ -34,7 +49,7 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ---
 
-## 📎 API Endpoints
+## API Endpoints
 
 ### `POST /api/upload`
 
@@ -63,21 +78,21 @@ Match resume against a job description and receive suggestions.
 
 **FormData**:
 
--   `resume`: PDF resume
--   `jd_text`: Job description (text)
+-   `jd_file`: Job description (PDF file)
+-   `resume_text`: Extracted resume text from previous step
 
 **Response**:
 
 ```json
 {
     "match_score": 84.67,
-    "suggestions": "- Emphasize FastAPI experience"
+    "gap_feedback": "1. Highlight Agile Experience...\n2. Emphasize Cloud-Based AI Services Experience...\n3. Specify Soft Skills..."
 }
 ```
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 ```bash
 pytest
@@ -92,7 +107,7 @@ Tests include:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ai-resume-analyzer/
@@ -115,7 +130,7 @@ ai-resume-analyzer/
 
 ---
 
-## 🛠 Local Setup
+## Local Setup
 
 ```bash
 git clone https://github.com/aoddy10/ai-resume-analyzer.git
@@ -128,6 +143,6 @@ docker-compose up --build
 
 ---
 
-## 📄 License
+## License
 
 MIT License © 2025 Anirut Puangkingkaew

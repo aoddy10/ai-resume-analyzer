@@ -1,10 +1,23 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { uploadResume } from "@/api/upload";
 import useAxios from "@/hooks/useAxios";
 import { AxiosProgressEvent } from "axios";
 import { Progress } from "./ui/progress";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Alert } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardContent,
+    CardDescription,
+} from "@/components/ui/card";
+import { AlertTriangle } from "lucide-react";
 
 type FeedbackDataProps = {
     filename: string;
@@ -12,10 +25,14 @@ type FeedbackDataProps = {
     gpt_feedback: string;
 };
 
-export default function ResumeUpload() {
+interface ResumeUploadProps {
+    onUploadSuccess?: (resumeText: string, gptFeedback: string) => void;
+}
+
+export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
     const axiosInstance = useAxios();
     const [file, setFile] = useState<File | null>(null);
-    const [message, setMessage] = useState<string>("");
+    const [errorText, setErrorText] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
     const [progress, setProgress] = useState<number>(0);
@@ -24,13 +41,23 @@ export default function ResumeUpload() {
         null
     );
 
+    // Scroll to feedback card when gpt_feedback is available
+    useEffect(() => {
+        if (feedbackData && feedbackData.gpt_feedback) {
+            const el = document.getElementById("gpt_feedback");
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }
+    }, [feedbackData]);
+
     const formRef = useRef<HTMLFormElement>(null);
     const dropRef = useRef<HTMLDivElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files[0]);
-            setMessage("");
+            setErrorText("");
             setPdfUrl(URL.createObjectURL(e.target.files[0]));
         }
     };
@@ -40,7 +67,7 @@ export default function ResumeUpload() {
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             setFile(e.dataTransfer.files[0]);
-            setMessage("");
+            setErrorText("");
             setPdfUrl(URL.createObjectURL(e.dataTransfer.files[0]));
         }
     };
@@ -60,7 +87,7 @@ export default function ResumeUpload() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) {
-            setMessage("Please select a PDF file");
+            setErrorText("Please select a PDF file");
             return;
         }
         setIsLoading(true);
@@ -80,12 +107,14 @@ export default function ResumeUpload() {
             });
             if (result) {
                 setFeedbackData(result);
-                setMessage("Upload and analysis completed successfully");
+                if (onUploadSuccess) {
+                    onUploadSuccess(result.resume_text, result.gpt_feedback);
+                }
             } else {
                 throw new Error("Parsing failed");
             }
         } catch (error) {
-            setMessage("Upload failed");
+            setErrorText("Upload failed");
         } finally {
             setIsLoading(false);
         }
@@ -113,37 +142,32 @@ export default function ResumeUpload() {
                     <form
                         ref={formRef}
                         onSubmit={handleSubmit}
-                        className="bg-white p-6 rounded-xl shadow-md"
+                        className="bg-white p-6 rounded-xl shadow-md flex flex-col gap-4 items-start"
                     >
-                        <h3 className="text-xl font-semibold mb-4">
-                            Please select a PDF file
-                        </h3>
-                        <input
+                        <Label>Please select a PDF file</Label>
+
+                        <Input
                             data-testid="file-input"
                             type="file"
                             accept="application/pdf"
                             onChange={handleFileChange}
-                            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 mb-4"
                         />
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                        >
-                            Submit
-                        </button>
 
-                        {message && (
-                            <p
-                                className="mt-4 text-sm text-gray-700"
-                                data-testid="upload-message"
-                            >
-                                {message}
+                        <Button size="lg">Submit</Button>
+
+                        {errorText && (
+                            <p className="text-sm text-red-600 flex items-center gap-2">
+                                <AlertTriangle className="w-4 h-4" />
+                                {errorText}
                             </p>
                         )}
                     </form>
                 </div>
                 {isLoading && (
-                    <div className="my-6">
+                    <div
+                        className="my-6 space-y-2"
+                        data-testid="loading-indicator"
+                    >
                         <p
                             className="text-blue-600 flex gap-2"
                             data-testid="loading-indicator"
@@ -176,36 +200,43 @@ export default function ResumeUpload() {
                 )}
 
                 {pdfUrl && (
-                    <div className="mt-6" data-testid="pdf-preview">
-                        <iframe
-                            src={pdfUrl}
-                            width="100%"
-                            height="500px"
-                            title="PDF Preview"
-                            className="border"
-                        ></iframe>
-                    </div>
+                    <Card
+                        id="gpt_feedback"
+                        className="mt-6"
+                        data-testid="pdf-preview"
+                    >
+                        <CardHeader>
+                            <CardTitle>Resume Preview</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <iframe
+                                src={pdfUrl}
+                                width="100%"
+                                height="500px"
+                                title="PDF Preview"
+                                className="border"
+                            ></iframe>
+                        </CardContent>
+                    </Card>
                 )}
 
                 {feedbackData && (
-                    <div
-                        className="mt-6 bg-white p-4 rounded shadow"
-                        data-testid="parsed-data"
-                    >
-                        <h3 className="text-xl font-semibold mb-2">
-                            Resume Analysis Result
-                        </h3>
-                        <p className="text-sm text-gray-800">
-                            <strong>Filename:</strong> {feedbackData.filename}
-                        </p>
-
-                        <div className="mt-2">
-                            <h4 className="font-semibold">AI Feedback</h4>
-                            <pre className="text-sm whitespace-pre-wrap">
+                    <Card className="mt-6" data-testid="parsed-data">
+                        <CardHeader>
+                            <CardTitle>Resume Analysis Result</CardTitle>
+                            <CardDescription>
+                                Filename: {feedbackData.filename}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <h4 className="font-semibold mb-2">
+                                Resume Feedback
+                            </h4>
+                            <p className="text-sm whitespace-pre-wrap">
                                 {feedbackData.gpt_feedback}
-                            </pre>
-                        </div>
-                    </div>
+                            </p>
+                        </CardContent>
+                    </Card>
                 )}
             </div>
         </section>

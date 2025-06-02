@@ -27,14 +27,11 @@ async def upload_resume(file: UploadFile = File(...)):
 
 @router.post("/match")
 async def match_resume_to_jd(
-    resume: UploadFile = File(...),
-    jd_text: str = Form(...)
+    resume_text: str = Form(...),
+    jd_file: UploadFile = File(...)
 ):
-    """
-    Upload resume + JD and return match score and improvement suggestions
-    """
-    resume_content = await resume.read()
-    resume_text = pdf_parser.extract_text_from_pdf(resume_content)
+    jd_content = await jd_file.read()
+    jd_text = pdf_parser.extract_text_from_pdf(jd_content)
 
     score = jd_matcher.calculate_match_score(resume_text, jd_text)
     suggestions = jd_matcher.generate_gap_feedback(resume_text, jd_text)

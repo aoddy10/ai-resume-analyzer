@@ -1,6 +1,6 @@
 import Feature from "@/components/Feature";
 import Hero from "@/components/Hero";
-import ResumeUpload from "@/components/ResumeUpload";
+import ScreenshotSection from "@/components/ScreenshotSection";
 
 export default function Home() {
     return (
@@ -10,7 +10,7 @@ export default function Home() {
 
                 <Feature />
 
-                <ResumeUpload />
+                <ScreenshotSection />
             </main>
         </div>
     );

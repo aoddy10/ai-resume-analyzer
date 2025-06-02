@@ -1,15 +1,11 @@
-/** @type {import('jest').Config} */
-const config = {
+module.exports = {
     preset: "ts-jest",
     testEnvironment: "jsdom",
-    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    transform: {
+        "^.+\\.(ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+    },
     moduleNameMapper: {
         "^@/(.*)$": "<rootDir>/src/$1",
     },
-    transform: {
-        "^.+\\.(ts|tsx)$": "ts-jest",
-    },
-    moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };
-
-module.exports = config;
