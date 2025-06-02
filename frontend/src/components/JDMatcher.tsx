@@ -42,7 +42,7 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
                 resumeText,
             });
             setMatchScore(result.match_score);
-            setGapFeedback(result.gap_feedback);
+            setGapFeedback(result.suggestions);
         } catch (error) {
             toast("Upload Failed", {
                 description: "Error analyzing job description",
@@ -104,10 +104,12 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
                                     {matchScore}%
                                 </span>
                             </p>
-                            <p className="mt-2 text-sm text-gray-700">
-                                <strong>GAP Feedback:</strong>{" "}
-                                {gapFeedback || "None"}
-                            </p>
+                            <div className="mt-2 text-sm text-gray-700">
+                                <strong>GAP Feedback:</strong>
+                                <pre className="whitespace-pre-wrap mt-1">
+                                    {gapFeedback || "None"}
+                                </pre>
+                            </div>
                         </div>
                     )}
                 </div>

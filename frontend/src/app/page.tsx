@@ -10,10 +10,6 @@ export default function Home() {
                 <Hero />
 
                 <Feature />
-
-                <Link href="/analyzer">
-                    <Button>Start Resume Analyzer</Button>
-                </Link>
             </main>
         </div>
     );

@@ -6,7 +6,7 @@ import JDMatcher from "@/components/JDMatcher";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { FileText } from "lucide-react";
+import { ChevronLeft, FileText } from "lucide-react";
 
 export default function ResumeAnalyzerPage() {
     const [step, setStep] = useState(1);
@@ -64,7 +64,7 @@ export default function ResumeAnalyzerPage() {
                         <>
                             <div className="mb-4">
                                 <h3 className="text-xl font-semibold mb-2">
-                                    ✅ Resume Uploaded & Analyzed
+                                    Resume Uploaded & Analyzed
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
                                     {gptFeedback.substring(0, 200)}...
@@ -77,7 +77,8 @@ export default function ResumeAnalyzerPage() {
                                     onClick={() => setStep(1)}
                                     variant="secondary"
                                 >
-                                    ⬅️ Back to Step 1
+                                    <ChevronLeft className="mr-2" />
+                                    Back to Step 1
                                 </Button>
                             </div>
                         </>
