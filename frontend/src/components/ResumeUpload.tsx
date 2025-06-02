@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { uploadResume } from "@/api/upload";
 import useAxios from "@/hooks/useAxios";
 import { AxiosProgressEvent } from "axios";
@@ -8,6 +8,16 @@ import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Alert } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardContent,
+    CardDescription,
+} from "@/components/ui/card";
+import { AlertTriangle, InfoIcon } from "lucide-react";
 
 type FeedbackDataProps = {
     filename: string;
@@ -22,7 +32,7 @@ interface ResumeUploadProps {
 export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
     const axiosInstance = useAxios();
     const [file, setFile] = useState<File | null>(null);
-    const [message, setMessage] = useState<string>("");
+    const [errorText, setErrorText] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
     const [progress, setProgress] = useState<number>(0);
@@ -31,13 +41,23 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
         null
     );
 
+    // Scroll to feedback card when gpt_feedback is available
+    useEffect(() => {
+        if (feedbackData && feedbackData.gpt_feedback) {
+            const el = document.getElementById("gpt_feedback");
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }
+    }, [feedbackData]);
+
     const formRef = useRef<HTMLFormElement>(null);
     const dropRef = useRef<HTMLDivElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setFile(e.target.files[0]);
-            setMessage("");
+            setErrorText("");
             setPdfUrl(URL.createObjectURL(e.target.files[0]));
         }
     };
@@ -47,7 +67,7 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             setFile(e.dataTransfer.files[0]);
-            setMessage("");
+            setErrorText("");
             setPdfUrl(URL.createObjectURL(e.dataTransfer.files[0]));
         }
     };
@@ -67,7 +87,7 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) {
-            setMessage("Please select a PDF file");
+            setErrorText("Please select a PDF file");
             return;
         }
         setIsLoading(true);
@@ -87,7 +107,6 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
             });
             if (result) {
                 setFeedbackData(result);
-                setMessage("Upload and analysis completed successfully");
                 if (onUploadSuccess) {
                     onUploadSuccess(result.resume_text, result.gpt_feedback);
                 }
@@ -95,7 +114,7 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                 throw new Error("Parsing failed");
             }
         } catch (error) {
-            setMessage("Upload failed");
+            setErrorText("Upload failed");
         } finally {
             setIsLoading(false);
         }
@@ -136,18 +155,19 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
 
                         <Button size="lg">Submit</Button>
 
-                        {message && (
-                            <p
-                                className="mt-4 text-sm text-gray-700"
-                                data-testid="upload-message"
-                            >
-                                * {message}
+                        {errorText && (
+                            <p className="text-sm text-red-600 flex items-center gap-2">
+                                <AlertTriangle className="w-4 h-4" />
+                                {errorText}
                             </p>
                         )}
                     </form>
                 </div>
                 {isLoading && (
-                    <div className="my-6">
+                    <div
+                        className="my-6 space-y-2"
+                        data-testid="loading-indicator"
+                    >
                         <p
                             className="text-blue-600 flex gap-2"
                             data-testid="loading-indicator"
@@ -175,42 +195,49 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                             </svg>
                             <span>Uploading and waiting for feedback...</span>
                         </p>
-                        <Progress value={progress} className="text-blue-600" />
+                        <Progress value={progress} />
                     </div>
                 )}
 
                 {pdfUrl && (
-                    <div className="mt-6" data-testid="pdf-preview">
-                        <iframe
-                            src={pdfUrl}
-                            width="100%"
-                            height="500px"
-                            title="PDF Preview"
-                            className="border"
-                        ></iframe>
-                    </div>
+                    <Card
+                        id="gpt_feedback"
+                        className="mt-6"
+                        data-testid="pdf-preview"
+                    >
+                        <CardHeader>
+                            <CardTitle>Resume Preview</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <iframe
+                                src={pdfUrl}
+                                width="100%"
+                                height="500px"
+                                title="PDF Preview"
+                                className="border"
+                            ></iframe>
+                        </CardContent>
+                    </Card>
                 )}
 
-                {/* {feedbackData && (
-                    <div
-                        className="mt-6 bg-white p-4 rounded shadow"
-                        data-testid="parsed-data"
-                    >
-                        <h3 className="text-xl font-semibold mb-2">
-                            Resume Analysis Result
-                        </h3>
-                        <p className="text-sm text-gray-800">
-                            <strong>Filename:</strong> {feedbackData.filename}
-                        </p>
-
-                        <div className="mt-2">
-                            <h4 className="font-semibold">AI Feedback</h4>
-                            <pre className="text-sm whitespace-pre-wrap">
+                {feedbackData && (
+                    <Card className="mt-6" data-testid="parsed-data">
+                        <CardHeader>
+                            <CardTitle>Resume Analysis Result</CardTitle>
+                            <CardDescription>
+                                Filename: {feedbackData.filename}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <h4 className="font-semibold mb-2">
+                                Resume Feedback
+                            </h4>
+                            <p className="text-sm whitespace-pre-wrap">
                                 {feedbackData.gpt_feedback}
-                            </pre>
-                        </div>
-                    </div>
-                )} */}
+                            </p>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
         </section>
     );

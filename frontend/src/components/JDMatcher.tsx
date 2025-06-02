@@ -106,9 +106,9 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
                             </p>
                             <div className="mt-2 text-sm text-gray-700">
                                 <strong>GAP Feedback:</strong>
-                                <pre className="whitespace-pre-wrap mt-1">
+                                <p className="whitespace-pre-wrap mt-1">
                                     {gapFeedback || "None"}
-                                </pre>
+                                </p>
                             </div>
                         </div>
                     )}

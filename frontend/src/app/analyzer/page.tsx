@@ -34,28 +34,13 @@ export default function ResumeAnalyzerPage() {
                             />
 
                             {gptFeedback && (
-                                <div>
-                                    <Card className="mt-6">
-                                        <CardHeader>
-                                            <CardTitle>
-                                                Previous Feedback
-                                            </CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                                                {gptFeedback}
-                                            </p>
-                                        </CardContent>
-                                    </Card>
-
-                                    <Button
-                                        className="mt-4"
-                                        onClick={() => setStep(2)}
-                                        disabled={!resumeText}
-                                    >
-                                        Go to next step: JD Matcher
-                                    </Button>
-                                </div>
+                                <Button
+                                    className="mt-4"
+                                    onClick={() => setStep(2)}
+                                    disabled={!resumeText}
+                                >
+                                    Go to next step: JD Matcher
+                                </Button>
                             )}
                         </div>
                     )}
@@ -67,7 +52,9 @@ export default function ResumeAnalyzerPage() {
                                     Resume Uploaded & Analyzed
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                    {gptFeedback.substring(0, 200)}...
+                                    Your resume has been successfully uploaded
+                                    and analyzed by GPT. You can now match it
+                                    against a Job Description.
                                 </p>
                             </div>
                             <Separator className="my-4" />
