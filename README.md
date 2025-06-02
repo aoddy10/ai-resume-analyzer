@@ -11,8 +11,9 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 -   📄 Upload PDF resumes
 -   🔍 Extract skills, experience, and education using NLP
--   📊 Match resume against job descriptions and calculate a similarity score
--   ✨ Get GPT-powered suggestions to improve resume for specific JD
+-   📊 Match resume against job descriptions with similarity scoring
+-   ✨ Get GPT-powered suggestions and GAP feedback for better alignment with job descriptions
+-   📁 Upload JD and resume for AI-based compatibility matching
 -   🧪 Fully tested backend with mocked GPT feedback
 -   💻 Modern, responsive frontend with Hero, Features, and Resume Upload sections
 -   📦 Dockerized backend and frontend with shared environment support
@@ -63,15 +64,15 @@ Match resume against a job description and receive suggestions.
 
 **FormData**:
 
--   `resume`: PDF resume
--   `jd_text`: Job description (text)
+-   `jd_file`: Job description (PDF file)
+-   `resume_text`: Extracted resume text from previous step
 
 **Response**:
 
 ```json
 {
     "match_score": 84.67,
-    "suggestions": "- Emphasize FastAPI experience"
+    "gap_feedback": "1. Highlight Agile Experience...\n2. Emphasize Cloud-Based AI Services Experience...\n3. Specify Soft Skills..."
 }
 ```
 

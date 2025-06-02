@@ -12,13 +12,13 @@ export async function matchJDWithResume(
     { jdFile, resumeText, onUploadProgress }: MatchJDOptions
 ): Promise<{
     match_score: number;
-    gap_feedback: string;
+    suggestions: string;
 }> {
     const formData = new FormData();
     formData.append("jd_file", jdFile);
     formData.append("resume_text", resumeText);
 
-    const response = await axiosInstance.post("/match", formData, {
+    const response = await axiosInstance.post("/api/match", formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },

@@ -48,7 +48,10 @@ Job Description:
 {jd_text}
 \"\"\"
 
-Respond in bullet points.
+Respond in numbered bullet points like:
+1. ...
+2. ...
+3. ...
     """
 
     response = client.chat.completions.create(
