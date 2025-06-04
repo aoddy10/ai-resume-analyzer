@@ -40,7 +40,7 @@ describe("JDMatcher Component", () => {
     it("calls API and displays match score and gap if successful", async () => {
         const mockResponse = {
             match_score: 84,
-            gap_feedback: "Missing: Leadership, Azure experience",
+            suggestions: "Missing: Leadership, Azure experience",
         };
 
         mockMatchJDWithResume.mockResolvedValueOnce(mockResponse);
@@ -102,8 +102,7 @@ describe("JDMatcher Component", () => {
             () =>
                 new Promise((resolve) => {
                     setTimeout(
-                        () =>
-                            resolve({ match_score: 80, gap_feedback: "none" }),
+                        () => resolve({ match_score: 80, suggestions: "none" }),
                         500
                     );
                 })

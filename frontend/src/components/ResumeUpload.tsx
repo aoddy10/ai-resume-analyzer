@@ -8,8 +8,6 @@ import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Alert } from "@/components/ui/alert";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
     Card,
     CardHeader,
