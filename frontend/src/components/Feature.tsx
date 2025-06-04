@@ -15,18 +15,21 @@ export default function Feature() {
                     success.
                 </p>
 
-                <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+                <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 items-stretch">
                     <FeatureCard
+                        variant="outline"
                         icon={FileText}
                         title="Smart PDF Parsing"
                         description="Extract clean, structured resume content from any PDF with high accuracy."
                     />
                     <FeatureCard
+                        variant="outline"
                         icon={Sparkles}
                         title="AI Feedback"
                         description="Receive personalized tips to improve clarity, tone, and impact."
                     />
                     <FeatureCard
+                        variant="outline"
                         icon={Target}
                         title="Job Match Scoring"
                         description="Get instant compatibility scores between your resume and job descriptions."

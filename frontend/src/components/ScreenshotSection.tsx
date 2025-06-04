@@ -10,16 +10,20 @@ type ScreenShotCardProps = {
 
 const ScreenShotCard: React.FC<ScreenShotCardProps> = ({ title, imageUrl }) => {
     return (
-        <div className="w-full">
-            <p className="mb-2">{title}</p>
-            <Image
-                src={imageUrl}
-                alt={title}
-                width={800}
-                height={600}
-                className="rounded-lg shadow-lg"
-            />
-        </div>
+        <Card className="flex flex-col md:flex-row items-center gap-4 shadow-md p-4">
+            <div className="flex-1">
+                <p className="font-medium text-lg">{title}</p>
+            </div>
+            <div className="flex-shrink-0 max-w-[600px] w-full">
+                <Image
+                    src={imageUrl}
+                    alt={title}
+                    width={600}
+                    height={400}
+                    className="rounded-lg shadow-md w-full h-auto"
+                />
+            </div>
+        </Card>
     );
 };
 
@@ -33,7 +37,7 @@ export default function ScreenshotSection() {
                             Resume Analyzer in Action
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="flex flex-col gap-8">
+                    <CardContent className="flex flex-col gap-6 py-6">
                         <ScreenShotCard
                             title="Step 1: Upload Resume"
                             imageUrl="/screenshots/step1-upload-resume.png"
