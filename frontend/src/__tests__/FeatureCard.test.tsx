@@ -19,4 +19,19 @@ describe("FeatureCard", () => {
         ).toBeInTheDocument();
         expect(screen.getByTestId("feature-icon")).toBeInTheDocument(); // icon render check
     });
+
+    it("applies correct visual classes", () => {
+        render(
+            <FeatureCard
+                icon={FileText}
+                title="Visual Test"
+                description="Check style classes"
+            />
+        );
+
+        const container = screen.getByText("Visual Test").closest("div");
+        expect(container).toHaveClass("rounded-xl");
+        expect(container).toHaveClass("shadow-sm");
+        expect(container).toHaveClass("hover:shadow-md");
+    });
 });

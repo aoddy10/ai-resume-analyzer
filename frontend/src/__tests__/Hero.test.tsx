@@ -9,7 +9,9 @@ describe("Hero Section", () => {
             screen.getByText(/Unlock Your Career Potential/i)
         ).toBeInTheDocument();
         expect(
-            screen.getByText(/let AI analyze your strengths, identify gaps/i)
+            screen.getByText(
+                /Upload your resume and let AI analyze your strengths, identify gaps, and score job matches instantly./i
+            )
         ).toBeInTheDocument();
     });
 });
