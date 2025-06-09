@@ -1,5 +1,5 @@
 # FastAPI main app entry point
-
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import upload
@@ -20,5 +20,4 @@ app.add_middleware(
 app.include_router(upload.router, prefix="/api")
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

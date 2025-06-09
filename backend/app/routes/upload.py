@@ -16,6 +16,14 @@ async def upload_resume(file: UploadFile = File(...)):
     """
     content = await file.read()
     extracted_text = pdf_parser.extract_text_from_pdf(content)
+
+    if not extracted_text.strip():
+        return {
+            "filename": file.filename,
+            "resume_text": "",
+            "gpt_feedback": "The uploaded file contains no readable content. Please upload a valid resume."
+        }
+
     feedback = gpt_feedback.generate_resume_feedback(extracted_text)
 
     return {
