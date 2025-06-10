@@ -14,9 +14,10 @@ import { FileText, CheckCircle, AlertTriangle } from "lucide-react";
 
 interface JDMatcherProps {
     resumeText: string;
+    onMatchScore: (n: number | null) => void;
 }
 
-const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
+const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
     const [jdFile, setJdFile] = useState<File | null>(null);
     const [matchScore, setMatchScore] = useState<number | null>(null);
     const [gapFeedback, setGapFeedback] = useState<string | null>(null);
@@ -44,6 +45,8 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
             });
             setMatchScore(result.match_score);
             setGapFeedback(result.suggestions);
+
+            onMatchScore(result.match_score);
         } catch (error) {
             toast("Upload Failed", {
                 description: "Error analyzing job description",
