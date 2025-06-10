@@ -1,8 +1,13 @@
-module.exports = {
+export default {
     preset: "ts-jest",
     testEnvironment: "jsdom",
     transform: {
-        "^.+\\.(ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+        "^.+\\.(ts|tsx)$": [
+            "ts-jest",
+            {
+                tsconfig: "tsconfig.json",
+            },
+        ],
     },
     moduleNameMapper: {
         "^@/(.*)$": "<rootDir>/src/$1",

@@ -8,8 +8,6 @@ import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Alert } from "@/components/ui/alert";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
     Card,
     CardHeader,
@@ -124,7 +122,7 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
         <section className="w-full py-20 md:py-28 bg-gray-50">
             <div className="container mx-auto max-w-screen-md px-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-6">
-                    Upload Your Resume
+                    Step 1: Upload Your Resume
                 </h2>
                 <div
                     ref={dropRef}
@@ -223,7 +221,9 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                 {feedbackData && (
                     <Card className="mt-6" data-testid="parsed-data">
                         <CardHeader>
-                            <CardTitle>Resume Analysis Result</CardTitle>
+                            <CardTitle>
+                                Step 2: Resume Analysis Result
+                            </CardTitle>
                             <CardDescription>
                                 Filename: {feedbackData.filename}
                             </CardDescription>

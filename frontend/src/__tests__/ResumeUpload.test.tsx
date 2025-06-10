@@ -4,6 +4,7 @@ import { act } from "react";
 import ResumeUpload from "@/components/ResumeUpload";
 
 global.URL.createObjectURL = jest.fn(() => "blob:http://localhost/mock-pdf");
+window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
 jest.mock("@/api/upload", () => {
     return {
@@ -92,7 +93,6 @@ describe("ResumeUpload Component", () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByTestId("loading-indicator")).toBeInTheDocument();
             expect(screen.getByRole("progressbar")).toBeInTheDocument();
         });
     });
@@ -114,7 +114,7 @@ describe("ResumeUpload Component", () => {
             await screen.findByText(/resume analysis result/i)
         ).toBeInTheDocument();
         expect(await screen.findByText(/filename:/i)).toBeInTheDocument();
-        expect(await screen.findByText(/AI feedback/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Resume Feedback/i)).toBeInTheDocument();
         expect(
             await screen.findByText("This is the feedback")
         ).toBeInTheDocument();

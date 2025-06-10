@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Transition } from "@headlessui/react";
 import { matchJDWithResume } from "@/api/match";
 import useAxios from "@/hooks/useAxios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,9 +14,10 @@ import { FileText, CheckCircle, AlertTriangle } from "lucide-react";
 
 interface JDMatcherProps {
     resumeText: string;
+    onMatchScore: (n: number | null) => void;
 }
 
-const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
+const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
     const [jdFile, setJdFile] = useState<File | null>(null);
     const [matchScore, setMatchScore] = useState<number | null>(null);
     const [gapFeedback, setGapFeedback] = useState<string | null>(null);
@@ -43,6 +45,8 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
             });
             setMatchScore(result.match_score);
             setGapFeedback(result.suggestions);
+
+            onMatchScore(result.match_score);
         } catch (error) {
             toast("Upload Failed", {
                 description: "Error analyzing job description",
@@ -55,64 +59,77 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText }) => {
     return (
         <Card className="max-w-2xl mx-auto mt-10">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-blue-500" />
-                    Upload Job Description (JD)
-                </CardTitle>
+                <CardTitle>Step 3: Match with Job Description</CardTitle>
             </CardHeader>
-
-            <CardContent>
-                <div className="space-y-4">
-                    <Label htmlFor="jd-file-input">Select JD PDF</Label>
-                    <Input
-                        id="jd-file-input"
-                        type="file"
-                        accept="application/pdf"
-                        onChange={handleFileChange}
-                        data-testid="jd-file-input"
-                    />
-                    {errorText && (
-                        <p className="text-sm text-red-600 flex items-center gap-2">
-                            <AlertTriangle className="w-4 h-4" />
-                            {errorText}
-                        </p>
-                    )}
-
-                    <Button onClick={handleMatch} disabled={loading}>
-                        Analyze Match
-                    </Button>
-
-                    {loading && (
-                        <div
-                            className="space-y-3 mt-6"
-                            data-testid="loading-indicator"
-                        >
-                            <Skeleton className="h-6 w-1/2" />
-                            <Skeleton className="h-4 w-full" />
-                        </div>
-                    )}
-
-                    {!loading && matchScore !== null && (
-                        <div
-                            className="mt-6 p-4 border rounded bg-green-50"
-                            data-testid="match-result"
-                        >
-                            <p className="text-lg font-semibold flex items-center gap-2">
-                                <CheckCircle className="w-5 h-5 text-green-600" />
-                                Match Score:{" "}
-                                <span className="text-green-700">
-                                    {matchScore}%
-                                </span>
-                            </p>
-                            <div className="mt-2 text-sm text-gray-700">
-                                <strong>GAP Feedback:</strong>
-                                <p className="whitespace-pre-wrap mt-1">
-                                    {gapFeedback || "None"}
+            <CardContent className="space-y-6 px-4">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <FileText className="w-5 h-5 text-blue-500" />
+                            Upload Job Description (JD)
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            <Label htmlFor="jd-file-input">Select JD PDF</Label>
+                            <Input
+                                id="jd-file-input"
+                                type="file"
+                                accept="application/pdf"
+                                onChange={handleFileChange}
+                                data-testid="jd-file-input"
+                            />
+                            {errorText && (
+                                <p className="text-sm text-red-600 flex items-center gap-2">
+                                    <AlertTriangle className="w-4 h-4" />
+                                    {errorText}
                                 </p>
-                            </div>
+                            )}
+
+                            <Button onClick={handleMatch} disabled={loading}>
+                                Analyze Match
+                            </Button>
+
+                            {loading && (
+                                <div
+                                    className="space-y-3 mt-6"
+                                    data-testid="loading-indicator"
+                                >
+                                    <Skeleton className="h-6 w-1/2" />
+                                    <Skeleton className="h-4 w-full" />
+                                </div>
+                            )}
+
+                            <Transition
+                                show={!loading && matchScore !== null}
+                                enter="transition-opacity duration-700"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="transition-opacity duration-500"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                            >
+                                <div>
+                                    <hr className="my-6 border-gray-300" />
+                                    <Card className="bg-green-50 border-green-200">
+                                        <CardHeader>
+                                            <CardTitle className="text-green-700 flex items-center gap-2">
+                                                <CheckCircle className="w-5 h-5 text-green-600" />
+                                                Match Score: {matchScore}%
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="text-sm text-gray-700">
+                                            <strong>GAP Feedback:</strong>
+                                            <p className="whitespace-pre-wrap mt-1">
+                                                {gapFeedback || "None"}
+                                            </p>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </Transition>
                         </div>
-                    )}
-                </div>
+                    </CardContent>
+                </Card>
             </CardContent>
         </Card>
     );

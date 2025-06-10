@@ -18,7 +18,7 @@ export async function matchJDWithResume(
     formData.append("jd_file", jdFile);
     formData.append("resume_text", resumeText);
 
-    const response = await axiosInstance.post("/api/match", formData, {
+    const response = await axiosInstance.post("/match", formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },
