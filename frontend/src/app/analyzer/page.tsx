@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ChevronLeft, FileText } from "lucide-react";
 import Link from "next/link";
+import ExportButton from "@/components/ExportButton";
 
 export default function ResumeAnalyzerPage() {
     const [step, setStep] = useState(1);
     const [resumeText, setResumeText] = useState<string>("");
     const [gptFeedback, setGptFeedback] = useState<string>("");
+    const [matchScore, setMatchScore] = useState<number | null>(null);
 
     const handleResumeSuccess = (text: string, feedback: string) => {
         setResumeText(text);
@@ -68,7 +70,18 @@ export default function ResumeAnalyzerPage() {
                                 </p>
                             </div>
                             <Separator className="my-4" />
-                            <JDMatcher resumeText={resumeText} />
+                            <JDMatcher
+                                resumeText={resumeText}
+                                onMatchScore={setMatchScore}
+                            />
+                            {matchScore !== null && (
+                                <div className="mt-6">
+                                    <ExportButton
+                                        feedback={gptFeedback}
+                                        matchScore={matchScore}
+                                    />
+                                </div>
+                            )}
                             <div className="mt-6 text-right">
                                 <Button
                                     onClick={() => setStep(1)}
