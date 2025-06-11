@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Resume Analysis Result</title>
+        <style>
+            body {
+                font-family: "Helvetica Neue", Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f9;
+                color: #333;
+            }
+            .container {
+                max-width: 800px;
+                margin: 50px auto;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+            .header {
+                text-align: center;
+                border-bottom: 2px solid #eaeaea;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+                color: #0073e6;
+            }
+            .content h2 {
+                font-size: 20px;
+                color: #0073e6;
+                margin-bottom: 10px;
+            }
+            .content p {
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Resume Analysis Result</h1>
+            </div>
+            <div class="content">
+                <h2>Strengths of the resume:</h2>
+                <p>{{ strengths }}</p>
+
+                <h2>Areas for improvement:</h2>
+                <p>{{ areas_for_improvement }}</p>
+
+                <h2>Missing Information:</h2>
+                <p>{{ missing_information }}</p>
+
+                <h2>Gap Feedback:</h2>
+                <p>{{ gap_feedback }}</p>
+            </div>
+        </div>
+    </body>
+</html>

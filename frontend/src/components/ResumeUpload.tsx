@@ -17,14 +17,23 @@ import {
 } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
 
+type ResumeFeedback = {
+    strengths: string;
+    areas_for_improvement: string;
+    missing_information: string;
+};
+
 type FeedbackDataProps = {
     filename: string;
     resume_text: string;
-    gpt_feedback: string;
+    resume_feedback: ResumeFeedback;
 };
 
 interface ResumeUploadProps {
-    onUploadSuccess?: (resumeText: string, gptFeedback: string) => void;
+    onUploadSuccess?: (
+        resumeText: string,
+        resumeFeedback: ResumeFeedback
+    ) => void;
 }
 
 export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
@@ -39,9 +48,9 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
         null
     );
 
-    // Scroll to feedback card when gpt_feedback is available
+    // Scroll to feedback card when resume_feedback is available
     useEffect(() => {
-        if (feedbackData && feedbackData.gpt_feedback) {
+        if (feedbackData && feedbackData.resume_feedback) {
             const el = document.getElementById("gpt_feedback");
             if (el) {
                 el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -106,12 +115,13 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
             if (result) {
                 setFeedbackData(result);
                 if (onUploadSuccess) {
-                    onUploadSuccess(result.resume_text, result.gpt_feedback);
+                    onUploadSuccess(result.resume_text, result.resume_feedback);
                 }
             } else {
                 throw new Error("Parsing failed");
             }
         } catch (error) {
+            console.error(error);
             setErrorText("Upload failed");
         } finally {
             setIsLoading(false);
@@ -232,9 +242,34 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                             <h4 className="font-semibold mb-2">
                                 Resume Feedback
                             </h4>
-                            <p className="text-sm whitespace-pre-wrap">
-                                {feedbackData.gpt_feedback}
-                            </p>
+                            <section className="mb-4">
+                                <h5 className="font-semibold">Strengths</h5>
+                                <p className="text-sm whitespace-pre-wrap">
+                                    {feedbackData.resume_feedback.strengths}
+                                </p>
+                            </section>
+                            <section className="mb-4">
+                                <h5 className="font-semibold">
+                                    Areas for Improvement
+                                </h5>
+                                <p className="text-sm whitespace-pre-wrap">
+                                    {
+                                        feedbackData.resume_feedback
+                                            .areas_for_improvement
+                                    }
+                                </p>
+                            </section>
+                            <section>
+                                <h5 className="font-semibold">
+                                    Missing Information
+                                </h5>
+                                <p className="text-sm whitespace-pre-wrap">
+                                    {
+                                        feedbackData.resume_feedback
+                                            .missing_information
+                                    }
+                                </p>
+                            </section>
                         </CardContent>
                     </Card>
                 )}

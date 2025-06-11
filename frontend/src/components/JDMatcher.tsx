@@ -14,13 +14,16 @@ import { FileText, CheckCircle, AlertTriangle } from "lucide-react";
 
 interface JDMatcherProps {
     resumeText: string;
-    onMatchScore: (n: number | null) => void;
+    onJDMatcherSuccess?: (feedback: object, score: number | null) => void; // Update feedback to object
 }
 
-const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
+const JDMatcher: React.FC<JDMatcherProps> = ({
+    resumeText,
+    onJDMatcherSuccess,
+}) => {
     const [jdFile, setJdFile] = useState<File | null>(null);
     const [matchScore, setMatchScore] = useState<number | null>(null);
-    const [gapFeedback, setGapFeedback] = useState<string | null>(null);
+    const [gapFeedback, setGapFeedback] = useState<object | null>(null); // Update type to object | null
     const [loading, setLoading] = useState(false);
     const [errorText, setErrorText] = useState("");
     const axiosInstance = useAxios();
@@ -37,20 +40,27 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
             return;
         }
 
+        setLoading(true);
+        setErrorText("");
+
         try {
-            setLoading(true);
             const result = await matchJDWithResume(axiosInstance, {
                 jdFile,
                 resumeText,
-            });
-            setMatchScore(result.match_score);
-            setGapFeedback(result.suggestions);
+            }); // Pass as object
+            const feedbackObject = { suggestions: result.suggestions }; // Convert to object
 
-            onMatchScore(result.match_score);
+            setGapFeedback(feedbackObject);
+            setMatchScore(result.match_score);
+
+            if (onJDMatcherSuccess) {
+                onJDMatcherSuccess(feedbackObject, result.match_score); // Pass as object
+            }
         } catch (error) {
-            toast("Upload Failed", {
-                description: "Error analyzing job description",
-            });
+            console.error("Error in JDMatcher", error);
+            toast.error(
+                "An error occurred while processing the job description."
+            );
         } finally {
             setLoading(false);
         }
@@ -121,7 +131,11 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
                                         <CardContent className="text-sm text-gray-700">
                                             <strong>GAP Feedback:</strong>
                                             <p className="whitespace-pre-wrap mt-1">
-                                                {gapFeedback || "None"}
+                                                {typeof gapFeedback === "object"
+                                                    ? JSON.stringify(
+                                                          gapFeedback
+                                                      )
+                                                    : gapFeedback || "None"}
                                             </p>
                                         </CardContent>
                                     </Card>
