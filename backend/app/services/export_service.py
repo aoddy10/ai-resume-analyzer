@@ -93,67 +93,41 @@ class ExportService:
 
         def format_feedback(feedback):
             if isinstance(feedback, list):
-                return "\n".join(str(item) for item in feedback)
+                return "\n".join(f"- {str(item)}" for item in feedback)
             elif isinstance(feedback, str):
-                # Check if string starts with numbered list items like "1.", "2.", etc.
-                if re.match(r'^\s*\d+\.', feedback):
-                    # Replace numbered list with bullet points
-                    lines = feedback.strip().splitlines()
-                    bullet_lines = []
-                    for line in lines:
-                        line = line.strip()
-                        # Replace leading number and dot with bullet
-                        bullet_line = re.sub(r'^\d+\.\s*', '- ', line)
-                        bullet_lines.append(bullet_line)
-                    return "\n".join(bullet_lines)
-                else:
-                    return feedback
+                return feedback
             else:
                 return ""
 
-        def format_gap_feedback(feedback):
-            """Format gap feedback by splitting numbered items with double newlines and replacing numbers with bullets."""
-            if not isinstance(feedback, str) or not feedback.strip():
-                return ""
-            # Replace numbered list with bullet points and split with double newlines for readability
-            items = re.split(r'\n\s*\d+\.\s*', feedback.strip())
-            # The first split part before first numbered item might be empty or header, keep it separate
-            if items and items[0].strip() == '':
-                items = items[1:]
-            formatted_items = []
-            for item in items:
-                item = item.strip()
-                if item:
-                    # Add bullet at start
-                    if not item.startswith('- '):
-                        item = '- ' + item
-                    formatted_items.append(item)
-            return "\n\n".join(formatted_items)
+        # Mapping from logical label (Title Case) to snake_case keys in dict
+        key_map = {
+            "Strengths": "strengths",
+            "Areas for Improvement": "areas_for_improvement",
+            "Missing Information": "missing_information"
+        }
 
-        # Process gap feedback to add double newlines between sections based on headings
-        gap_feedback_raw = gpt_feedback.get("Gap Feedback", "")
-        gap_sections = re.split(r'(?=\n?[A-Z][^\n]*?:)', gap_feedback_raw)
-        gap_feedback_joined = "\n\n".join(s.strip() for s in gap_sections if s.strip())
-        gap_feedback_processed = format_gap_feedback(gap_feedback_joined)
+        sections = [
+            ("Strengths of the resume", "Strengths"),
+            ("Areas for improvement", "Areas for Improvement"),
+            ("Missing Information", "Missing Information"),
+            ("Gap Feedback", "Gap Feedback")
+        ]
 
-        return f"""# Resume Feedback
+        md_lines = ["# Resume Feedback", ""]
 
-## Strengths of the resume:
-{format_feedback(gpt_feedback.get("Strengths", ""))}
+        for title, key in sections:
+            md_lines.append(f"## {title}:")
+            if key == "Gap Feedback":
+                gap_feedback = jdmatch_feedback.get("suggestions", [])
+                md_lines.append(format_feedback(gap_feedback))
+            else:
+                val = gpt_feedback.get(key_map.get(key, key), "")
+                md_lines.append(format_feedback(val))
+            md_lines.append("")
 
-## Areas for improvement:
-{format_feedback(gpt_feedback.get("Areas for Improvement", ""))}
+        md_lines.append("---")
+        md_lines.append("")
+        md_lines.append(f"**Match Score:** {match_score:.2f} / 100")
+        md_lines.append("")
 
-## Missing Information:
-{format_feedback(gpt_feedback.get("Missing Information", ""))}
-
-## Gap Feedback:
-{gap_feedback_processed}
-
-## JD Match Feedback:
-{jdmatch_feedback.get("Feedback", "")}
-
----
-
-**Match Score:** {match_score:.2f} / 100
-"""
+        return "\n".join(md_lines)
