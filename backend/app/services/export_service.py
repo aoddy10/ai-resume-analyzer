@@ -20,53 +20,31 @@ class ExportService:
         )
         template = env.get_template('resume_result.html')
 
-        # print("Generating PDF with resume feedback:", resume_feedback)
-        # print("Generating PDF with JD match feedback:", jdmatch_feedback)
-
+        from markupsafe import escape
         def format_feedback(feedback):
             if isinstance(feedback, list):
-                return "\n".join(str(item) for item in feedback)
+                # Render as HTML unordered list, escaping each item
+                items = [f"<li>{escape(str(item))}</li>" for item in feedback if item and str(item).strip()]
+                return "<ul>" + "".join(items) + "</ul>" if items else ""
             elif isinstance(feedback, str):
                 # Check if string starts with numbered list items like "1.", "2.", etc.
                 if re.match(r'^\s*\d+\.', feedback):
-                    # Replace numbered list with bullet points
+                    # Replace numbered list with bullet points as HTML list
                     lines = feedback.strip().splitlines()
-                    bullet_lines = []
+                    items = []
                     for line in lines:
                         line = line.strip()
-                        # Replace leading number and dot with bullet
-                        bullet_line = re.sub(r'^\d+\.\s*', '- ', line)
-                        bullet_lines.append(bullet_line)
-                    return "\n".join(bullet_lines)
+                        # Remove leading number and dot
+                        text = re.sub(r'^\d+\.\s*', '', line)
+                        if text:
+                            items.append(f"<li>{escape(text)}</li>")
+                    return "<ul>" + "".join(items) + "</ul>" if items else ""
                 else:
-                    return feedback
+                    # Just escape and return as plain text
+                    return escape(feedback)
             else:
                 return ""
 
-        def format_gap_feedback(feedback):
-            """Format gap feedback by adding line breaks after each numbered item, preserving headings."""
-            if not isinstance(feedback, str) or not feedback.strip():
-                return ""
-            # Split text by numbered list items (e.g., '1.', '2.', '3.') while keeping headings intact
-            parts = re.split(r'(\n?\d+\.\s*)', feedback.strip())
-            formatted_parts = []
-            i = 0
-            while i < len(parts):
-                part = parts[i].strip()
-                if re.match(r'^\d+\.$', part):
-                    # This is just a number with a dot, append with next content and add newline
-                    if i + 1 < len(parts):
-                        content = parts[i + 1].strip()
-                        formatted_parts.append(f"{part} {content}\n")
-                        i += 2
-                    else:
-                        formatted_parts.append(f"{part}\n")
-                        i += 1
-                else:
-                    # Could be heading or normal text
-                    formatted_parts.append(part)
-                    i += 1
-            return "\n".join(formatted_parts).strip()
 
         # Mapping from logical label (Title Case) to snake_case keys in dict
         key_map = {
@@ -80,24 +58,26 @@ class ExportService:
             key = key_map.get(label, label)
             return data.get(key, "")
 
-        print(format_feedback(get_key(resume_feedback, "Strengths")))
-        print(format_feedback(get_key(resume_feedback, "Areas for Improvement")))
-        print(format_feedback(get_key(resume_feedback, "Missing Information")))
-
-        # Process gap_feedback to add line breaks after numbered items, preserving headings
-        gap_feedback_raw = jdmatch_feedback.get("suggestions", "")
-        # Split on headings starting with capital letter and colon, e.g. "Section Title:"
-        gap_sections = re.split(r'(?=\n?[A-Z][^\n]*?:)', gap_feedback_raw)
-        gap_feedback_joined = "\n\n".join(s.strip() for s in gap_sections if s.strip())
-        gap_feedback_processed = format_gap_feedback(gap_feedback_joined)
-        gap_feedback_html = gap_feedback_processed.replace("\n", "<br>\n")
+        # Process gap_feedback assuming 'suggestions' is a list of suggestion strings
+        gap_feedback_list = jdmatch_feedback.get("suggestions", [])
+        from markupsafe import escape
+        if isinstance(gap_feedback_list, list):
+            # Render as HTML list string
+            items = [f"<li>{escape(str(s))}</li>" for s in gap_feedback_list if s and str(s).strip()]
+            gap_feedback_html = "<ul>" + "".join(items) + "</ul>" if items else ""
+        else:
+            # fallback: treat as plain text, escape only, as a single-item list
+            if gap_feedback_list and str(gap_feedback_list).strip():
+                gap_feedback_html = f"<ul><li>{escape(str(gap_feedback_list))}</li></ul>"
+            else:
+                gap_feedback_html = ""
 
         # Render HTML from template
         html_content = template.render(
             strengths=format_feedback(get_key(resume_feedback, "Strengths")),
             areas_for_improvement=format_feedback(get_key(resume_feedback, "Areas for Improvement")),
             missing_information=format_feedback(get_key(resume_feedback, "Missing Information")),
-            gap_feedback=gap_feedback_html,
+            gap_feedback=gap_feedback_html,  # Now an HTML string; template should use | safe
             match_score=match_score
         )
 

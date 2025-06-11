@@ -7,7 +7,7 @@
                 font-family: "Helvetica Neue", Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                background-color: #f4f4f9;
+                background-color: #fff;
                 color: #333;
             }
             .container {
@@ -17,6 +17,15 @@
                 border-radius: 8px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 padding: 20px;
+            }
+            .match-score-block {
+                padding: 18px 24px;
+                border-radius: 8px;
+                color: #fff;
+                font-weight: bold;
+                font-size: 20px;
+                margin-top: 30px;
+                text-align: center;
             }
             .header {
                 text-align: center;
@@ -38,6 +47,12 @@
                 line-height: 1.6;
                 margin-bottom: 20px;
             }
+            .content ul {
+                margin-bottom: 16px;
+            }
+            .content ul li {
+                margin-bottom: 8px;
+            }
         </style>
     </head>
     <body>
@@ -47,17 +62,26 @@
             </div>
             <div class="content">
                 <h2>Strengths of the resume:</h2>
-                <p>{{ strengths }}</p>
+                <p>{{ strengths | safe }}</p>
 
                 <h2>Areas for improvement:</h2>
-                <p>{{ areas_for_improvement }}</p>
+                <p>{{ areas_for_improvement | safe }}</p>
 
                 <h2>Missing Information:</h2>
-                <p>{{ missing_information }}</p>
+                <p>{{ missing_information | safe }}</p>
 
                 <h2>Gap Feedback:</h2>
-                <p>{{ gap_feedback }}</p>
+                {{ gap_feedback | safe }}
             </div>
+            {% if match_score is defined %} {% if match_score < 70 %}
+            <div class="match-score-block" style="background-color: #d9534f">
+                Match Score: {{ match_score }}%
+            </div>
+            {% else %}
+            <div class="match-score-block" style="background-color: #5cb85c">
+                Match Score: {{ match_score }}%
+            </div>
+            {% endif %} {% endif %}
         </div>
     </body>
 </html>

@@ -15,18 +15,18 @@ export default function ResumeAnalyzerPage() {
     const [resumeText, setResumeText] = useState<string>("");
     const [gptFeedback, setGptFeedback] = useState<object>({}); // Update type to object
     const [matchScore, setMatchScore] = useState<number | null>(null);
-    const [gapFeedback, setGapFeedback] = useState<object>({}); // Update type to object
+    const [gapFeedback, setGapFeedback] = useState<object>({}); // Update type to string[]
 
     const handleResumeSuccess = (text: string, feedback: object) => {
-        console.log(feedback);
-        // Convert array fields to joined string for PDF export
-
         setResumeText(text);
         setGptFeedback(feedback);
     };
 
-    const handleJDMatcherSuccess = (feedback: object, score: number | null) => {
-        setGapFeedback(feedback);
+    const handleJDMatcherSuccess = (
+        gap_feedback: object,
+        score: number | null
+    ) => {
+        setGapFeedback(gap_feedback);
         setMatchScore(score);
     };
 

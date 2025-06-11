@@ -6,14 +6,9 @@ import { toast } from "sonner";
 import { exportFile } from "@/api/export";
 import useAxios from "@/hooks/useAxios";
 
-type Feedback = {
-    gptFeedback?: string; // Assuming this is a string, adjust if it's an object
-    suggestions?: string;
-};
-
 type ExportButtonProps = {
-    resumeFeedback: Feedback; // Updated type to reflect actual structure
-    jdMatchFeedback: Feedback; // Updated type to reflect actual structure
+    resumeFeedback: object;
+    jdMatchFeedback: object;
     matchScore: number;
 };
 
@@ -28,9 +23,6 @@ export default function ExportButton({
     const handleExport = async (format: "pdf" | "md") => {
         setLoading(true);
         try {
-            console.log("Raw resumeFeedback:", resumeFeedback); // Debug log
-            console.log("Raw jdMatchFeedback:", jdMatchFeedback); // Debug log
-
             await exportFile(axiosInstance, {
                 format,
                 resumeFeedback, // Send raw feedback object

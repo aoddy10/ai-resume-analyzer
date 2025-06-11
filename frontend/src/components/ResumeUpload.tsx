@@ -18,9 +18,9 @@ import {
 import { AlertTriangle } from "lucide-react";
 
 type ResumeFeedback = {
-    strengths: string;
-    areas_for_improvement: string;
-    missing_information: string;
+    strengths: string[];
+    areas_for_improvement: string[];
+    missing_information: string[];
 };
 
 type FeedbackDataProps = {
@@ -112,6 +112,7 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                     }
                 },
             });
+
             if (result) {
                 setFeedbackData(result);
                 if (onUploadSuccess) {

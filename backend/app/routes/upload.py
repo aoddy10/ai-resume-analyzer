@@ -46,5 +46,7 @@ async def match_resume_to_jd(
 
     return {
         "match_score": score,
-        "suggestions": suggestions
+        "gap_feedback": {
+            "suggestions": suggestions
+        }
     }

@@ -25,8 +25,6 @@ export async function exportFile(
         match_score: matchScore, // Send as float
     };
 
-    console.log(payload); // Debug log to check payload structure
-
     const response = await axiosInstance.post(`/export/${format}`, payload, {
         responseType: "blob",
         headers: { "Content-Type": "application/json" },

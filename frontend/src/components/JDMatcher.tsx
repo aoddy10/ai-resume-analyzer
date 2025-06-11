@@ -14,7 +14,7 @@ import { FileText, CheckCircle, AlertTriangle } from "lucide-react";
 
 interface JDMatcherProps {
     resumeText: string;
-    onJDMatcherSuccess?: (feedback: object, score: number | null) => void; // Update feedback to object
+    onJDMatcherSuccess?: (gap_feedback: object, score: number | null) => void; // Update feedback to string[]
 }
 
 const JDMatcher: React.FC<JDMatcherProps> = ({
@@ -23,7 +23,7 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
 }) => {
     const [jdFile, setJdFile] = useState<File | null>(null);
     const [matchScore, setMatchScore] = useState<number | null>(null);
-    const [gapFeedback, setGapFeedback] = useState<object | null>(null); // Update type to object | null
+    const [gapFeedback, setGapFeedback] = useState<string[]>([]); // Update type to string[]
     const [loading, setLoading] = useState(false);
     const [errorText, setErrorText] = useState("");
     const axiosInstance = useAxios();
@@ -48,13 +48,15 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
                 jdFile,
                 resumeText,
             }); // Pass as object
-            const feedbackObject = { suggestions: result.suggestions }; // Convert to object
 
-            setGapFeedback(feedbackObject);
-            setMatchScore(result.match_score);
+            // Use optional chaining and fallback to empty array
+            const suggestionsArray = result?.gap_feedback?.suggestions || [];
+
+            setGapFeedback(suggestionsArray);
+            setMatchScore(result?.match_score);
 
             if (onJDMatcherSuccess) {
-                onJDMatcherSuccess(feedbackObject, result.match_score); // Pass as object
+                onJDMatcherSuccess(result?.gap_feedback, result?.match_score); // Pass as string[]
             }
         } catch (error) {
             console.error("Error in JDMatcher", error);
@@ -130,13 +132,22 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
                                         </CardHeader>
                                         <CardContent className="text-sm text-gray-700">
                                             <strong>GAP Feedback:</strong>
-                                            <p className="whitespace-pre-wrap mt-1">
-                                                {typeof gapFeedback === "object"
-                                                    ? JSON.stringify(
-                                                          gapFeedback
-                                                      )
-                                                    : gapFeedback || "None"}
-                                            </p>
+                                            {gapFeedback.length > 0 ? (
+                                                <ul className="list-disc list-inside mt-1">
+                                                    {gapFeedback.map(
+                                                        (suggestion, index) => (
+                                                            <li
+                                                                key={index}
+                                                                className="mt-2"
+                                                            >
+                                                                {suggestion}
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            ) : (
+                                                <p className="mt-1">None</p>
+                                            )}
                                         </CardContent>
                                     </Card>
                                 </div>
