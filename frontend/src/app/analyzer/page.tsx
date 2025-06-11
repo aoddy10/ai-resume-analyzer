@@ -13,12 +13,21 @@ import ExportButton from "@/components/ExportButton";
 export default function ResumeAnalyzerPage() {
     const [step, setStep] = useState(1);
     const [resumeText, setResumeText] = useState<string>("");
-    const [gptFeedback, setGptFeedback] = useState<string>("");
+    const [gptFeedback, setGptFeedback] = useState<object>({}); // Update type to object
     const [matchScore, setMatchScore] = useState<number | null>(null);
+    const [gapFeedback, setGapFeedback] = useState<object>({}); // Update type to string[]
 
-    const handleResumeSuccess = (text: string, feedback: string) => {
+    const handleResumeSuccess = (text: string, feedback: object) => {
         setResumeText(text);
         setGptFeedback(feedback);
+    };
+
+    const handleJDMatcherSuccess = (
+        gap_feedback: object,
+        score: number | null
+    ) => {
+        setGapFeedback(gap_feedback);
+        setMatchScore(score);
     };
 
     return (
@@ -45,7 +54,7 @@ export default function ResumeAnalyzerPage() {
                                 onUploadSuccess={handleResumeSuccess}
                             />
 
-                            {gptFeedback && (
+                            {Object.keys(gptFeedback).length > 0 && (
                                 <Button
                                     className="mt-4"
                                     onClick={() => setStep(2)}
@@ -72,12 +81,13 @@ export default function ResumeAnalyzerPage() {
                             <Separator className="my-4" />
                             <JDMatcher
                                 resumeText={resumeText}
-                                onMatchScore={setMatchScore}
+                                onJDMatcherSuccess={handleJDMatcherSuccess} // Pass handleJDMatcherSuccess to JDMatcher
                             />
                             {matchScore !== null && (
                                 <div className="mt-6">
                                     <ExportButton
-                                        feedback={gptFeedback}
+                                        resumeFeedback={gptFeedback}
+                                        jdMatchFeedback={gapFeedback}
                                         matchScore={matchScore}
                                     />
                                 </div>

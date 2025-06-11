@@ -12,7 +12,7 @@ export async function matchJDWithResume(
     { jdFile, resumeText, onUploadProgress }: MatchJDOptions
 ): Promise<{
     match_score: number;
-    suggestions: string;
+    gap_feedback: { suggestions: string[] };
 }> {
     const formData = new FormData();
     formData.append("jd_file", jdFile);
@@ -25,5 +25,6 @@ export async function matchJDWithResume(
         onUploadProgress,
     });
 
+    // Assuming the new response format is { data: { match_score: number, suggestions: string[] } }
     return response.data;
 }

@@ -4,19 +4,33 @@ from fastapi import APIRouter, Query
 from fastapi.responses import StreamingResponse, PlainTextResponse
 from app.services.export_service import ExportService
 from urllib.parse import unquote
+from pydantic import BaseModel
 
 router = APIRouter()
 
-@router.get("/export/pdf")
-def export_pdf(feedback: str = Query(...), match_score: float = Query(...)):
+class FeedbackRequest(BaseModel):
+    resume_feedback: dict
+    jdmatch_feedback: dict 
+    match_score: float
+
+@router.post("/export/pdf")
+def export_pdf(feedback_request: FeedbackRequest):
     """Return a PDF file with feedback"""
-    feedback = unquote(feedback)
-    pdf = ExportService.generate_pdf(feedback, match_score)
+
+    
+    pdf = ExportService.generate_pdf(
+        feedback_request.resume_feedback,
+        feedback_request.jdmatch_feedback,
+        feedback_request.match_score
+    )
     return StreamingResponse(pdf, media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=result.pdf"})
 
-@router.get("/export/md")
-def export_md(feedback: str = Query(...), match_score: float = Query(...)):
+@router.post("/export/md")
+def export_md(feedback_request: FeedbackRequest):
     """Return a Markdown file with feedback"""
-    feedback = unquote(feedback)
-    md = ExportService.generate_md(feedback, match_score)
-    return PlainTextResponse(content=md, media_type="text/markdown", headers={"Content-Disposition": "attachment; filename=result.md"})
+    md = ExportService.generate_md(
+        feedback_request.resume_feedback,
+        feedback_request.jdmatch_feedback, 
+        feedback_request.match_score
+    )
+    return PlainTextResponse(md, media_type="text/markdown")

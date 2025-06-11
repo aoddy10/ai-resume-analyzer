@@ -14,13 +14,16 @@ import { FileText, CheckCircle, AlertTriangle } from "lucide-react";
 
 interface JDMatcherProps {
     resumeText: string;
-    onMatchScore: (n: number | null) => void;
+    onJDMatcherSuccess?: (gap_feedback: object, score: number | null) => void; // Update feedback to string[]
 }
 
-const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
+const JDMatcher: React.FC<JDMatcherProps> = ({
+    resumeText,
+    onJDMatcherSuccess,
+}) => {
     const [jdFile, setJdFile] = useState<File | null>(null);
     const [matchScore, setMatchScore] = useState<number | null>(null);
-    const [gapFeedback, setGapFeedback] = useState<string | null>(null);
+    const [gapFeedback, setGapFeedback] = useState<string[]>([]); // Update type to string[]
     const [loading, setLoading] = useState(false);
     const [errorText, setErrorText] = useState("");
     const axiosInstance = useAxios();
@@ -37,20 +40,29 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
             return;
         }
 
+        setLoading(true);
+        setErrorText("");
+
         try {
-            setLoading(true);
             const result = await matchJDWithResume(axiosInstance, {
                 jdFile,
                 resumeText,
-            });
-            setMatchScore(result.match_score);
-            setGapFeedback(result.suggestions);
+            }); // Pass as object
 
-            onMatchScore(result.match_score);
+            // Use optional chaining and fallback to empty array
+            const suggestionsArray = result?.gap_feedback?.suggestions || [];
+
+            setGapFeedback(suggestionsArray);
+            setMatchScore(result?.match_score);
+
+            if (onJDMatcherSuccess) {
+                onJDMatcherSuccess(result?.gap_feedback, result?.match_score); // Pass as string[]
+            }
         } catch (error) {
-            toast("Upload Failed", {
-                description: "Error analyzing job description",
-            });
+            console.error("Error in JDMatcher", error);
+            toast.error(
+                "An error occurred while processing the job description."
+            );
         } finally {
             setLoading(false);
         }
@@ -120,9 +132,22 @@ const JDMatcher: React.FC<JDMatcherProps> = ({ resumeText, onMatchScore }) => {
                                         </CardHeader>
                                         <CardContent className="text-sm text-gray-700">
                                             <strong>GAP Feedback:</strong>
-                                            <p className="whitespace-pre-wrap mt-1">
-                                                {gapFeedback || "None"}
-                                            </p>
+                                            {gapFeedback.length > 0 ? (
+                                                <ul className="list-disc list-inside mt-1">
+                                                    {gapFeedback.map(
+                                                        (suggestion, index) => (
+                                                            <li
+                                                                key={index}
+                                                                className="mt-2"
+                                                            >
+                                                                {suggestion}
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            ) : (
+                                                <p className="mt-1">None</p>
+                                            )}
                                         </CardContent>
                                     </Card>
                                 </div>

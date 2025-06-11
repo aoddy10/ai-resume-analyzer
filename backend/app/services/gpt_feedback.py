@@ -1,13 +1,14 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
+import json
 
 # Load .env file if it exists
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def generate_resume_feedback(resume_text: str) -> str:
+def generate_resume_feedback(resume_text: str) -> dict:
     """
     Generate professional resume feedback using GPT-4.
 
@@ -15,20 +16,24 @@ def generate_resume_feedback(resume_text: str) -> str:
     - resume_text (str): The plain text extracted from a resume.
 
     Returns:
-    - str: GPT-generated feedback on resume quality and improvements.
+    - dict: GPT-generated feedback on resume quality and improvements in JSON format with keys:
+      "strengths", "areas_for_improvement", "missing_information".
     """
     prompt = f"""
-You are a professional career coach. Analyze the following resume content and provide feedback on:
-1. Strengths of the resume
-2. Areas for improvement
-3. Missing information (skills, achievements, formatting, etc.)
+You are a professional career coach. Analyze the following resume content and provide feedback strictly in the following JSON format ONLY without any additional text:
+
+{{
+  "strengths": [string],
+  "areas_for_improvement": [string],
+  "missing_information": [string]
+}}
 
 Resume:
 \"\"\"
 {resume_text}
 \"\"\"
 
-Respond clearly and concisely in bullet points.
+Respond ONLY with the JSON object as specified.
     """
 
     response = client.chat.completions.create(
@@ -40,4 +45,13 @@ Respond clearly and concisely in bullet points.
         temperature=0.7
     )
 
-    return response.choices[0].message.content or "No feedback generated."
+    content = response.choices[0].message.content or "{}"
+    try:
+        feedback_json = json.loads(content)
+    except json.JSONDecodeError:
+        feedback_json = {
+            "strengths": [],
+            "areas_for_improvement": [],
+            "missing_information": []
+        }
+    return feedback_json

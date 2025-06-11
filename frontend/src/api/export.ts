@@ -3,23 +3,31 @@ import type { AxiosProgressEvent } from "axios";
 
 interface ExportFileOptions {
     format: "pdf" | "md";
-    feedback: string;
+    resumeFeedback: object; // Allow both string and object
+    jdMatchFeedback: object; // Allow both string and object
     matchScore: number;
     onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
 }
 
 export async function exportFile(
     axiosInstance: ReturnType<typeof useAxios>,
-    { format, feedback, matchScore, onUploadProgress }: ExportFileOptions
+    {
+        format,
+        resumeFeedback,
+        jdMatchFeedback,
+        matchScore,
+        onUploadProgress,
+    }: ExportFileOptions
 ): Promise<void> {
-    const params = {
-        feedback: encodeURIComponent(feedback),
-        match_score: encodeURIComponent(matchScore.toString()),
+    const payload = {
+        resume_feedback: resumeFeedback,
+        jdmatch_feedback: jdMatchFeedback,
+        match_score: matchScore, // Send as float
     };
 
-    const response = await axiosInstance.get(`/export/${format}`, {
+    const response = await axiosInstance.post(`/export/${format}`, payload, {
         responseType: "blob",
-        params,
+        headers: { "Content-Type": "application/json" },
         onUploadProgress,
     });
 
