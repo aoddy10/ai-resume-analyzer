@@ -11,11 +11,11 @@ import {
 
 export default function Hero() {
     return (
-        <section className="w-full bg-gradient-to-b from-white to-gray-50 py-20 md:py-28">
+        <section className="w-full bg-gradient-to-b from-white to-gray-50 dark:from-background dark:to-muted py-20 md:py-28">
             <div className="container mx-auto max-w-screen-lg px-4">
-                <Card className="text-center shadow-lg p-8">
+                <Card className="text-center shadow-lg p-6 sm:p-8 bg-card text-card-foreground">
                     <CardContent>
-                        <CardTitle className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+                        <CardTitle className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
                             Unlock Your Career Potential
                         </CardTitle>
                         <CardDescription className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">

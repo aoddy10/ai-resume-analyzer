@@ -7,12 +7,14 @@ import { exportFile } from "@/api/export";
 import useAxios from "@/hooks/useAxios";
 
 type ExportButtonProps = {
-    feedback: string;
+    resumeFeedback: object;
+    jdMatchFeedback: object;
     matchScore: number;
 };
 
 export default function ExportButton({
-    feedback,
+    resumeFeedback,
+    jdMatchFeedback,
     matchScore,
 }: ExportButtonProps) {
     const [loading, setLoading] = useState(false);
@@ -21,7 +23,12 @@ export default function ExportButton({
     const handleExport = async (format: "pdf" | "md") => {
         setLoading(true);
         try {
-            await exportFile(axiosInstance, { format, feedback, matchScore });
+            await exportFile(axiosInstance, {
+                format,
+                resumeFeedback, // Send raw feedback object
+                jdMatchFeedback, // Send raw feedback object
+                matchScore,
+            });
 
             toast(
                 `Download successful: Your ${format.toUpperCase()} file has been downloaded.`
@@ -37,7 +44,7 @@ export default function ExportButton({
     };
 
     return (
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 dark:text-foreground">
             <Button onClick={() => handleExport("pdf")} disabled={loading}>
                 {loading ? "Exporting..." : "Export PDF"}
             </Button>

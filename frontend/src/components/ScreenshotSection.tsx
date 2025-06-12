@@ -12,7 +12,9 @@ const ScreenShotCard: React.FC<ScreenShotCardProps> = ({ title, imageUrl }) => {
     return (
         <Card className="flex flex-col md:flex-row items-center gap-4 shadow-md p-4">
             <div className="flex-1">
-                <p className="font-medium text-lg">{title}</p>
+                <p className="font-medium text-lg text-foreground dark:text-foreground">
+                    {title}
+                </p>
             </div>
             <div className="flex-shrink-0 max-w-[600px] w-full">
                 <Image
@@ -29,9 +31,9 @@ const ScreenShotCard: React.FC<ScreenShotCardProps> = ({ title, imageUrl }) => {
 
 export default function ScreenshotSection() {
     return (
-        <section className="w-full py-20 bg-muted/50">
+        <section className="w-full py-20 bg-muted/50 bg-background text-foreground">
             <div className="container max-w-5xl mx-auto px-4">
-                <Card className="shadow-lg">
+                <Card className="shadow-lg dark:bg-muted/70">
                     <CardHeader>
                         <CardTitle className="text-center text-2xl font-semibold">
                             Resume Analyzer in Action

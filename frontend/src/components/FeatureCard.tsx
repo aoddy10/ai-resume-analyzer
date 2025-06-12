@@ -17,17 +17,19 @@ export default function FeatureCard({
     return (
         <Card
             className={`text-left hover:shadow-md transition ${
-                variant === "outline" ? "border border-gray-300" : ""
+                variant === "outline"
+                    ? "border border-gray-300 dark:border-gray-700"
+                    : ""
             }`}
         >
             <CardHeader className="flex flex-row items-center gap-4">
-                <div className="rounded-full bg-gray-100 p-3">
+                <div className="rounded-full bg-gray-100 dark:bg-muted p-3">
                     <Icon
                         className="h-6 w-6 text-primary"
                         data-testid="feature-icon"
                     />
                 </div>
-                <CardTitle className="text-lg font-semibold text-gray-900">
+                <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
                     {title}
                 </CardTitle>
             </CardHeader>

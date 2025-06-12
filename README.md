@@ -3,7 +3,7 @@
 A GPT-powered application that analyzes resumes, matches them against job descriptions, and provides improvement suggestions — using semantic search and natural language generation.
 
 ![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20OpenAI%20%7C%20TfidfVectorizer%20%7C%20Docker-blue)
-![Status](https://img.shields.io/badge/Status-Backend%20%2B%20Frontend%20Core%20Completed-yellow)
+![Status](https://img.shields.io/badge/Status-Phase%203%20In%20Progress-yellow)
 
 ---
 
@@ -30,22 +30,24 @@ Here's a quick look at the Resume Analyzer in action:
 -   📁 Upload JD and resume for AI-based compatibility matching
 -   🧪 Fully tested backend with mocked GPT feedback
 -   💻 Modern, responsive frontend with Hero, Features, and Resume Upload sections
+-   🌙 Dark Mode toggle with full Tailwind support and responsive layout adjustments
 -   📦 Dockerized backend and frontend with shared environment support
 -   📤 Show real-time progress bar and loading state during file upload
 -   🧾 Preview uploaded PDF and display GPT feedback from backend
+-   📥 Export GPT Feedback & Match Score เป็น PDF/Markdown
 
 ---
 
 ## Tech Stack
 
-| Layer     | Tech                                                    |
-| --------- | ------------------------------------------------------- |
-| Frontend  | Next.js, TypeScript, Tailwind CSS, ShadCN, Lucide Icons |
-| Backend   | FastAPI, Python                                         |
-| AI        | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity        |
-| Parsing   | PyMuPDF                                                 |
-| Testing   | Pytest, Monkeypatch, TestClient                         |
-| Container | Docker + Docker Compose                                 |
+| Layer     | Tech                                                                |
+| --------- | ------------------------------------------------------------------- |
+| Frontend  | Next.js, TypeScript, Tailwind CSS (Dark Mode), ShadCN, Lucide Icons |
+| Backend   | FastAPI, Python                                                     |
+| AI        | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity                    |
+| Parsing   | PyMuPDF                                                             |
+| Testing   | Pytest, Monkeypatch, TestClient                                     |
+| Container | Docker + Docker Compose                                             |
 
 ---
 
@@ -89,6 +91,36 @@ Match resume against a job description and receive suggestions.
     "gap_feedback": "1. Highlight Agile Experience...\n2. Emphasize Cloud-Based AI Services Experience...\n3. Specify Soft Skills..."
 }
 ```
+
+---
+
+### `GET /api/export/pdf`
+
+Export GPT feedback and match score as a PDF file. Requires `feedback` and `match_score` query parameters.
+
+**Query Parameters**:
+
+-   `feedback` (string): Feedback text to include in the export.
+-   `match_score` (float): Match score to include in the export.
+
+**Response**:
+
+-   Returns a PDF file with the provided feedback and match score.
+
+---
+
+### `GET /api/export/md`
+
+Export GPT feedback and match score as a Markdown file. Requires `feedback` and `match_score` query parameters.
+
+**Query Parameters**:
+
+-   `feedback` (string): Feedback text to include in the export.
+-   `match_score` (float): Match score to include in the export.
+
+**Response**:
+
+-   Returns a Markdown file with the provided feedback and match score.
 
 ---
 

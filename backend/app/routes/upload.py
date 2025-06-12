@@ -4,7 +4,7 @@ from app.services import pdf_parser, gpt_feedback, jd_matcher
 router = APIRouter()
 
 @router.post("/upload")
-async def upload_resume(file: UploadFile = File(...)):
+async def upload_resume(file: UploadFile = File(...)) -> dict:
     """
     Upload a resume PDF and extract its text content using PyMuPDF.
 
@@ -21,15 +21,15 @@ async def upload_resume(file: UploadFile = File(...)):
         return {
             "filename": file.filename,
             "resume_text": "",
-            "gpt_feedback": "The uploaded file contains no readable content. Please upload a valid resume."
+            "resume_feedback": "The uploaded file contains no readable content. Please upload a valid resume."
         }
 
-    feedback = gpt_feedback.generate_resume_feedback(extracted_text)
+    resume_feedback = gpt_feedback.generate_resume_feedback(extracted_text)
 
     return {
         "filename": file.filename,
         "resume_text": extracted_text,
-        "gpt_feedback": feedback
+        "resume_feedback": resume_feedback
     }
 
 
@@ -46,5 +46,7 @@ async def match_resume_to_jd(
 
     return {
         "match_score": score,
-        "suggestions": suggestions
+        "gap_feedback": {
+            "suggestions": suggestions
+        }
     }
