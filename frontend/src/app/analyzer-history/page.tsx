@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useHistoryStore, ResumeHistoryItem } from "@/hooks/useHistoryStore";
+import { useHistoryStore, ResumeHistoryItem } from "@/store/useHistoryStore";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 

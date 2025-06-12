@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+
 import ResumeUpload from "@/components/ResumeUpload";
 import JDMatcher from "@/components/JDMatcher";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { ChevronLeft, FileText } from "lucide-react";
 import Link from "next/link";
 import ExportButton from "@/components/ExportButton";
+import { addHistoryEntry } from "@/store/useHistoryStore";
 
 export default function ResumeAnalyzerPage() {
     const [step, setStep] = useState(1);
@@ -23,11 +25,23 @@ export default function ResumeAnalyzerPage() {
     };
 
     const handleJDMatcherSuccess = (
-        gap_feedback: object,
+        fileName: string,
+        feedback: object,
         score: number | null
     ) => {
-        setGapFeedback(gap_feedback);
+        setGapFeedback(feedback);
         setMatchScore(score);
+
+        // add history entry
+        addHistoryEntry({
+            id: crypto.randomUUID(),
+            filename: fileName, // Placeholder, replace with actual filename if available
+            resumeText: fileName,
+            gapFeedback: JSON.stringify(feedback), // Convert to string for storage
+            matchScore: score ?? 0,
+            gptFeedback: JSON.stringify(gptFeedback),
+            timestamp: Date.now(),
+        });
     };
 
     return (
