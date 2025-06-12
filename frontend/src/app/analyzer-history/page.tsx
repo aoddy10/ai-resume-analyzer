@@ -16,6 +16,7 @@ import {
     AlertDialogCancel,
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import JDMatcherViewDialog from "@/components/JDMatcherViewDialog";
 
 export default function AnalyzerHistoryPage() {
     const { getHistory, clearHistory } = useHistoryStore();
@@ -23,11 +24,8 @@ export default function AnalyzerHistoryPage() {
 
     useEffect(() => {
         setHistory(getHistory());
+        console.log(history);
     }, [getHistory]);
-
-    const handleView = (item: ResumeHistoryItem) => {
-        alert(`Viewing: ${item.filename}`);
-    };
 
     const handleReanalyze = (item: ResumeHistoryItem) => {
         alert(`Re-analyzing: ${item.filename}`);
@@ -78,12 +76,7 @@ export default function AnalyzerHistoryPage() {
                                     </p>
                                 </div>
                                 <div className="flex gap-2 mt-4 sm:mt-0">
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => handleView(item)}
-                                    >
-                                        View
-                                    </Button>
+                                    <JDMatcherViewDialog item={item} />
                                     <Button
                                         variant="secondary"
                                         onClick={() => handleReanalyze(item)}

@@ -37,9 +37,9 @@ export default function ResumeAnalyzerPage() {
             id: crypto.randomUUID(),
             filename: fileName, // Placeholder, replace with actual filename if available
             resumeText: fileName,
-            gapFeedback: JSON.stringify(feedback), // Convert to string for storage
+            gapFeedback: feedback, // Convert to string for storage
             matchScore: score ?? 0,
-            gptFeedback: JSON.stringify(gptFeedback),
+            gptFeedback: gptFeedback,
             timestamp: Date.now(),
         });
     };
