@@ -24,7 +24,6 @@ export default function AnalyzerHistoryPage() {
 
     useEffect(() => {
         setHistory(getHistory());
-        console.log(history);
     }, [getHistory]);
 
     const handleReanalyze = (item: ResumeHistoryItem) => {
@@ -38,7 +37,7 @@ export default function AnalyzerHistoryPage() {
     };
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
+        <div className="px-4 sm:px-6 py-6 max-w-4xl mx-auto">
             <h1 className="text-2xl font-semibold mb-4 dark:text-white">
                 Resume Analysis History
             </h1>
@@ -51,7 +50,7 @@ export default function AnalyzerHistoryPage() {
                             key={item.id}
                             className="border p-4 rounded-md shadow-sm bg-card text-card-foreground"
                         >
-                            <div className="flex justify-between flex-wrap gap-2 items-center">
+                            <div className="flex flex-col sm:flex-row justify-between gap-4 sm:items-center">
                                 <div>
                                     <p className="font-medium">
                                         {item.filename}
@@ -75,7 +74,7 @@ export default function AnalyzerHistoryPage() {
                                         </Badge>
                                     </p>
                                 </div>
-                                <div className="flex gap-2 mt-4 sm:mt-0">
+                                <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
                                     <JDMatcherViewDialog item={item} />
                                     <Button
                                         variant="secondary"

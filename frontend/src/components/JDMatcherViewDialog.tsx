@@ -40,7 +40,7 @@ export default function JDMatcherViewDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="mt-4">
+                <div className="mt-4 px-2 sm:px-4 space-y-6 text-sm sm:text-base">
                     <p className="font-medium">
                         Match Score:{" "}
                         <Badge
@@ -54,9 +54,11 @@ export default function JDMatcherViewDialog({
                         </Badge>
                     </p>
 
-                    <section className="mt-4 space-y-3">
+                    <section className="space-y-3 sm:space-y-4">
                         <div>
-                            <h3 className="font-semibold">Strengths:</h3>
+                            <h3 className="font-semibold text-base sm:text-lg">
+                                Strengths:
+                            </h3>
                             <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
                                 {parsedGptFeedback?.strengths?.map(
                                     (s: string, i: number) => (
@@ -67,7 +69,7 @@ export default function JDMatcherViewDialog({
                         </div>
 
                         <div>
-                            <h3 className="font-semibold">
+                            <h3 className="font-semibold text-base sm:text-lg">
                                 Areas for Improvement:
                             </h3>
                             <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
@@ -80,7 +82,7 @@ export default function JDMatcherViewDialog({
                         </div>
 
                         <div>
-                            <h3 className="font-semibold">
+                            <h3 className="font-semibold text-base sm:text-lg">
                                 Missing Information:
                             </h3>
                             <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
@@ -93,7 +95,7 @@ export default function JDMatcherViewDialog({
                         </div>
 
                         <div>
-                            <h3 className="font-semibold mt-4">
+                            <h3 className="font-semibold text-base sm:text-lg mt-4">
                                 Gap Feedback:
                             </h3>
                             <ul className="list-disc list-inside text-sm text-muted-foreground mt-1">
