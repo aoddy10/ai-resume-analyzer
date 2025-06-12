@@ -84,7 +84,7 @@ export default function ResumeAnalyzerPage() {
                                 onJDMatcherSuccess={handleJDMatcherSuccess} // Pass handleJDMatcherSuccess to JDMatcher
                             />
 
-                            <div className="flex justify-between items-center mt-6">
+                            <div className="flex flex-col sm:flow-row gap-3 justify-between items-center mt-6">
                                 {matchScore !== null && (
                                     <ExportButton
                                         resumeFeedback={gptFeedback}

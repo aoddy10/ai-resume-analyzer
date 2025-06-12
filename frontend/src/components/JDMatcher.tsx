@@ -69,11 +69,11 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
     };
 
     return (
-        <Card className="max-w-2xl mx-auto mt-10 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <Card className="max-w-2xl mx-auto mt-10 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 dark:max-w-full">
             <CardHeader>
-                <CardTitle>Step 3: Match with Job Description</CardTitle>
+                <CardTitle>Step 2: Match with Job Description</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6 px-4">
+            <CardContent className="space-y-6 px-4 dark:px-0">
                 <Card className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
