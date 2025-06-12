@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useHistoryStore, ResumeHistoryItem } from "@/store/useHistoryStore";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
 export default function AnalyzerHistoryPage() {
@@ -52,20 +53,20 @@ export default function AnalyzerHistoryPage() {
                                             "PPpp"
                                         )}
                                     </p>
-                                    <p className="text-sm">
+                                    <p className="text-sm mt-2">
                                         Match Score:{" "}
-                                        <span
-                                            className={
+                                        <Badge
+                                            className={`ml-2 ${
                                                 item.matchScore >= 70
-                                                    ? "text-green-600"
-                                                    : "text-red-600"
-                                            }
+                                                    ? "bg-green-600 text-white"
+                                                    : "bg-red-600 text-white"
+                                            }`}
                                         >
                                             {item.matchScore.toFixed(2)}%
-                                        </span>
+                                        </Badge>
                                     </p>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 mt-4 sm:mt-0">
                                     <Button
                                         variant="outline"
                                         onClick={() => handleView(item)}
