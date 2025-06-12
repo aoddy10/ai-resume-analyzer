@@ -44,7 +44,7 @@ export default function ExportButton({
     };
 
     return (
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 dark:text-foreground">
             <Button onClick={() => handleExport("pdf")} disabled={loading}>
                 {loading ? "Exporting..." : "Export PDF"}
             </Button>

@@ -130,9 +130,9 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
     };
 
     return (
-        <section className="w-full py-20 md:py-28 bg-gray-50">
+        <section className="w-full py-20 md:py-28 bg-gray-50 dark:bg-gray-900">
             <div className="container mx-auto max-w-screen-md px-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-white mb-6">
                     Step 1: Upload Your Resume
                 </h2>
                 <div
@@ -145,13 +145,13 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                     className={`p-4 border-2 border-dashed rounded-lg ${
                         dragActive
                             ? "border-blue-600 bg-blue-50"
-                            : "border-gray-300"
+                            : "border-gray-300 dark:border-gray-600"
                     }`}
                 >
                     <form
                         ref={formRef}
                         onSubmit={handleSubmit}
-                        className="bg-white p-6 rounded-xl shadow-md flex flex-col gap-4 items-start"
+                        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md flex flex-col gap-4 items-start"
                     >
                         <Label>Please select a PDF file</Label>
 
@@ -165,7 +165,7 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                         <Button size="lg">Submit</Button>
 
                         {errorText && (
-                            <p className="text-sm text-red-600 flex items-center gap-2">
+                            <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
                                 <AlertTriangle className="w-4 h-4" />
                                 {errorText}
                             </p>
@@ -223,7 +223,7 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                                 width="100%"
                                 height="500px"
                                 title="PDF Preview"
-                                className="border"
+                                className="border dark:border-gray-600"
                             ></iframe>
                         </CardContent>
                     </Card>
@@ -244,16 +244,18 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                                 Resume Feedback
                             </h4>
                             <section className="mb-4">
-                                <h5 className="font-semibold">Strengths</h5>
-                                <p className="text-sm whitespace-pre-wrap">
+                                <h5 className="font-semibold text-gray-800 dark:text-gray-100">
+                                    Strengths
+                                </h5>
+                                <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-300">
                                     {feedbackData.resume_feedback.strengths}
                                 </p>
                             </section>
                             <section className="mb-4">
-                                <h5 className="font-semibold">
+                                <h5 className="font-semibold text-gray-800 dark:text-gray-100">
                                     Areas for Improvement
                                 </h5>
-                                <p className="text-sm whitespace-pre-wrap">
+                                <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-300">
                                     {
                                         feedbackData.resume_feedback
                                             .areas_for_improvement
@@ -261,10 +263,10 @@ export default function ResumeUpload({ onUploadSuccess }: ResumeUploadProps) {
                                 </p>
                             </section>
                             <section>
-                                <h5 className="font-semibold">
+                                <h5 className="font-semibold text-gray-800 dark:text-gray-100">
                                     Missing Information
                                 </h5>
-                                <p className="text-sm whitespace-pre-wrap">
+                                <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-300">
                                     {
                                         feedbackData.resume_feedback
                                             .missing_information
