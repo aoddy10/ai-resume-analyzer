@@ -69,30 +69,36 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
     };
 
     return (
-        <Card className="max-w-2xl mx-auto mt-10">
+        <Card className="max-w-2xl mx-auto mt-10 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 dark:max-w-full">
             <CardHeader>
-                <CardTitle>Step 3: Match with Job Description</CardTitle>
+                <CardTitle>Step 2: Match with Job Description</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6 px-4">
-                <Card>
+            <CardContent className="space-y-6 px-4 dark:px-0">
+                <Card className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
-                            <FileText className="w-5 h-5 text-blue-500" />
+                            <FileText className="w-5 h-5 text-blue-500 dark:text-blue-400" />
                             Upload Job Description (JD)
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            <Label htmlFor="jd-file-input">Select JD PDF</Label>
+                            <Label
+                                htmlFor="jd-file-input"
+                                className="dark:text-gray-300"
+                            >
+                                Select JD PDF
+                            </Label>
                             <Input
                                 id="jd-file-input"
                                 type="file"
                                 accept="application/pdf"
                                 onChange={handleFileChange}
                                 data-testid="jd-file-input"
+                                className="dark:bg-gray-700 dark:text-gray-100"
                             />
                             {errorText && (
-                                <p className="text-sm text-red-600 flex items-center gap-2">
+                                <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
                                     <AlertTriangle className="w-4 h-4" />
                                     {errorText}
                                 </p>
@@ -122,15 +128,15 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
                                 leaveTo="opacity-0"
                             >
                                 <div>
-                                    <hr className="my-6 border-gray-300" />
-                                    <Card className="bg-green-50 border-green-200">
+                                    <hr className="my-6 border-gray-300 dark:border-gray-700" />
+                                    <Card className="bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-700">
                                         <CardHeader>
-                                            <CardTitle className="text-green-700 flex items-center gap-2">
-                                                <CheckCircle className="w-5 h-5 text-green-600" />
+                                            <CardTitle className="text-green-700 dark:text-green-300 flex items-center gap-2">
+                                                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                                                 Match Score: {matchScore}%
                                             </CardTitle>
                                         </CardHeader>
-                                        <CardContent className="text-sm text-gray-700">
+                                        <CardContent className="text-sm text-gray-700 dark:text-gray-300">
                                             <strong>GAP Feedback:</strong>
                                             {gapFeedback.length > 0 ? (
                                                 <ul className="list-disc list-inside mt-1">
@@ -146,7 +152,9 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
                                                     )}
                                                 </ul>
                                             ) : (
-                                                <p className="mt-1">None</p>
+                                                <p className="mt-1 text-gray-700 dark:text-gray-300">
+                                                    None
+                                                </p>
                                             )}
                                         </CardContent>
                                     </Card>

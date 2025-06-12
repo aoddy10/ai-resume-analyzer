@@ -5,9 +5,9 @@ import FeatureCard from "@/components/FeatureCard";
 
 export default function Feature() {
     return (
-        <section className="w-full bg-white py-20 md:py-28">
+        <section className="w-full bg-white dark:bg-background py-20 md:py-28">
             <div className="container mx-auto max-w-screen-lg px-4 text-center">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
                     Powerful Resume Tools
                 </h2>
                 <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">

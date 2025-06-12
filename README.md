@@ -30,6 +30,7 @@ Here's a quick look at the Resume Analyzer in action:
 -   📁 Upload JD and resume for AI-based compatibility matching
 -   🧪 Fully tested backend with mocked GPT feedback
 -   💻 Modern, responsive frontend with Hero, Features, and Resume Upload sections
+-   🌙 Dark Mode toggle with full Tailwind support and responsive layout adjustments
 -   📦 Dockerized backend and frontend with shared environment support
 -   📤 Show real-time progress bar and loading state during file upload
 -   🧾 Preview uploaded PDF and display GPT feedback from backend
@@ -39,14 +40,14 @@ Here's a quick look at the Resume Analyzer in action:
 
 ## Tech Stack
 
-| Layer     | Tech                                                    |
-| --------- | ------------------------------------------------------- |
-| Frontend  | Next.js, TypeScript, Tailwind CSS, ShadCN, Lucide Icons |
-| Backend   | FastAPI, Python                                         |
-| AI        | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity        |
-| Parsing   | PyMuPDF                                                 |
-| Testing   | Pytest, Monkeypatch, TestClient                         |
-| Container | Docker + Docker Compose                                 |
+| Layer     | Tech                                                                |
+| --------- | ------------------------------------------------------------------- |
+| Frontend  | Next.js, TypeScript, Tailwind CSS (Dark Mode), ShadCN, Lucide Icons |
+| Backend   | FastAPI, Python                                                     |
+| AI        | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity                    |
+| Parsing   | PyMuPDF                                                             |
+| Testing   | Pytest, Monkeypatch, TestClient                                     |
+| Container | Docker + Docker Compose                                             |
 
 ---
 
