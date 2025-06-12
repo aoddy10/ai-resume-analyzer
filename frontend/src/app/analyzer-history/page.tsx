@@ -5,6 +5,17 @@ import { useHistoryStore, ResumeHistoryItem } from "@/store/useHistoryStore";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogFooter,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export default function AnalyzerHistoryPage() {
     const { getHistory, clearHistory } = useHistoryStore();
@@ -79,12 +90,39 @@ export default function AnalyzerHistoryPage() {
                                     >
                                         Re-analyze
                                     </Button>
-                                    <Button
-                                        variant="destructive"
-                                        onClick={() => handleDelete(item.id)}
-                                    >
-                                        Delete
-                                    </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="destructive">
+                                                Delete
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    Confirm Deletion
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Are you sure you want to
+                                                    delete this history item?
+                                                    This action cannot be
+                                                    undone.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>
+                                                    Cancel
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    onClick={() =>
+                                                        handleDelete(item.id)
+                                                    }
+                                                    className="bg-red-600 hover:bg-red-700 text-white"
+                                                >
+                                                    Delete
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </div>
                             </div>
                         </div>
