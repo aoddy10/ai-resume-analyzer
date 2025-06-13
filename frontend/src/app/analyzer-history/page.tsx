@@ -26,6 +26,13 @@ export default function AnalyzerHistoryPage() {
         setHistory(getHistory());
     }, [getHistory]);
 
+    useEffect(() => {
+        if (history.length > 0) {
+            console.log(history[0]);
+            console.log(typeof history[0].gptFeedback);
+        }
+    }, [history]);
+
     const handleReanalyze = (item: ResumeHistoryItem) => {
         alert(`Re-analyzing: ${item.filename}`);
     };
@@ -74,48 +81,91 @@ export default function AnalyzerHistoryPage() {
                                         </Badge>
                                     </p>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
-                                    <JDMatcherViewDialog item={item} />
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => handleReanalyze(item)}
-                                    >
-                                        Re-analyze
-                                    </Button>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button variant="destructive">
-                                                Delete
+                                {(() => {
+                                    let gptFeedbackObj = null;
+                                    let gapFeedbackObj = null;
+
+                                    try {
+                                        gptFeedbackObj =
+                                            typeof item.gptFeedback === "string"
+                                                ? JSON.parse(item.gptFeedback)
+                                                : item.gptFeedback;
+                                        gapFeedbackObj =
+                                            typeof item.gapFeedback === "string"
+                                                ? JSON.parse(item.gapFeedback)
+                                                : item.gapFeedback;
+                                    } catch (e) {
+                                        console.error(
+                                            "Failed to parse feedback:",
+                                            e
+                                        );
+                                    }
+
+                                    return (
+                                        <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
+                                            {gptFeedbackObj ||
+                                            gapFeedbackObj ? (
+                                                <JDMatcherViewDialog
+                                                    item={{
+                                                        ...item,
+                                                        gptFeedback:
+                                                            gptFeedbackObj,
+                                                        gapFeedback:
+                                                            gapFeedbackObj,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground italic">
+                                                    No feedback data available.
+                                                </p>
+                                            )}
+                                            <Button
+                                                variant="secondary"
+                                                onClick={() =>
+                                                    handleReanalyze(item)
+                                                }
+                                            >
+                                                Re-analyze
                                             </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    Confirm Deletion
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    Are you sure you want to
-                                                    delete this history item?
-                                                    This action cannot be
-                                                    undone.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>
-                                                    Cancel
-                                                </AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={() =>
-                                                        handleDelete(item.id)
-                                                    }
-                                                    className="bg-red-600 hover:bg-red-700 text-white"
-                                                >
-                                                    Delete
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </div>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="destructive">
+                                                        Delete
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Confirm Deletion
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Are you sure you
+                                                            want to delete this
+                                                            history item? This
+                                                            action cannot be
+                                                            undone.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    item.id
+                                                                )
+                                                            }
+                                                            className="bg-red-600 hover:bg-red-700 text-white"
+                                                        >
+                                                            Delete
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
                     ))}
