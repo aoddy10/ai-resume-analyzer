@@ -45,10 +45,18 @@ export default function ExportButton({
 
     return (
         <div className="flex flex-col sm:flex-row gap-3 dark:text-foreground">
-            <Button onClick={() => handleExport("pdf")} disabled={loading}>
+            <Button
+                variant="outline"
+                onClick={() => handleExport("pdf")}
+                disabled={loading}
+            >
                 {loading ? "Exporting..." : "Export PDF"}
             </Button>
-            <Button onClick={() => handleExport("md")} disabled={loading}>
+            <Button
+                variant="outline"
+                onClick={() => handleExport("md")}
+                disabled={loading}
+            >
                 {loading ? "Exporting..." : "Export Markdown"}
             </Button>
         </div>

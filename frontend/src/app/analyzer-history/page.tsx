@@ -27,13 +27,6 @@ export default function AnalyzerHistoryPage() {
         setHistory(getHistory());
     }, [getHistory]);
 
-    useEffect(() => {
-        if (history.length > 0) {
-            console.log(history[0]);
-            console.log(typeof history[0].gptFeedback);
-        }
-    }, [history]);
-
     const handleDelete = (id: string) => {
         const updated = history.filter((item) => item.id !== id);
         localStorage.setItem("resume_history", JSON.stringify(updated));
