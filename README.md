@@ -40,13 +40,15 @@ Here's a quick look at the Resume Analyzer in action:
 -   📦 Dockerized backend and frontend with shared environment support
 -   📤 Show real-time progress bar and loading state during file upload
 -   🧾 Preview uploaded PDF and display GPT feedback from backend
--   📥 Export GPT Feedback & Match Score เป็น PDF/Markdown
+-   📥 Export GPT Feedback & Match Score as PDF/Markdown
+-   📥 Download full history items as PDF or Markdown from the Resume History section
 
 ## UI Features
 
 -   🌓 Use the top-right toggle in the Navbar to switch between Light and Dark Mode
 -   🧠 Analyzer History is saved in your browser (localStorage)
 -   📱 Responsive layout with animated hamburger menu and drawer
+-   📄 One-click download of previously analyzed resume feedback
 
 ---
 

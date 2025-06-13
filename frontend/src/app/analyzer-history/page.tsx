@@ -17,6 +17,7 @@ import {
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import JDMatcherViewDialog from "@/components/JDMatcherViewDialog";
+import ExportButton from "@/components/ExportButton";
 
 export default function AnalyzerHistoryPage() {
     const { getHistory, clearHistory } = useHistoryStore();
@@ -25,10 +26,6 @@ export default function AnalyzerHistoryPage() {
     useEffect(() => {
         setHistory(getHistory());
     }, [getHistory]);
-
-    const handleReanalyze = (item: ResumeHistoryItem) => {
-        alert(`Re-analyzing: ${item.filename}`);
-    };
 
     const handleDelete = (id: string) => {
         const updated = history.filter((item) => item.id !== id);
@@ -74,48 +71,102 @@ export default function AnalyzerHistoryPage() {
                                         </Badge>
                                     </p>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
-                                    <JDMatcherViewDialog item={item} />
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => handleReanalyze(item)}
-                                    >
-                                        Re-analyze
-                                    </Button>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button variant="destructive">
-                                                Delete
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    Confirm Deletion
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    Are you sure you want to
-                                                    delete this history item?
-                                                    This action cannot be
-                                                    undone.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>
-                                                    Cancel
-                                                </AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    onClick={() =>
-                                                        handleDelete(item.id)
-                                                    }
-                                                    className="bg-red-600 hover:bg-red-700 text-white"
-                                                >
-                                                    Delete
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </div>
+                                {(() => {
+                                    let gptFeedbackObj = null;
+                                    let gapFeedbackObj = null;
+
+                                    try {
+                                        gptFeedbackObj =
+                                            typeof item.gptFeedback === "string"
+                                                ? JSON.parse(item.gptFeedback)
+                                                : item.gptFeedback;
+                                        gapFeedbackObj =
+                                            typeof item.gapFeedback === "string"
+                                                ? JSON.parse(item.gapFeedback)
+                                                : item.gapFeedback;
+                                    } catch (e) {
+                                        console.error(
+                                            "Failed to parse feedback:",
+                                            e
+                                        );
+                                    }
+
+                                    return (
+                                        <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
+                                            {gptFeedbackObj ||
+                                            gapFeedbackObj ? (
+                                                <JDMatcherViewDialog
+                                                    item={{
+                                                        ...item,
+                                                        gptFeedback:
+                                                            gptFeedbackObj,
+                                                        gapFeedback:
+                                                            gapFeedbackObj,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground italic">
+                                                    No feedback data available.
+                                                </p>
+                                            )}
+
+                                            {gptFeedbackObj &&
+                                                gapFeedbackObj &&
+                                                item.matchScore && (
+                                                    <div className="my-1 sm:my-0 sm:mx-1">
+                                                        <ExportButton
+                                                            resumeFeedback={
+                                                                gptFeedbackObj
+                                                            }
+                                                            jdMatchFeedback={
+                                                                gapFeedbackObj
+                                                            }
+                                                            matchScore={
+                                                                item.matchScore
+                                                            }
+                                                        />
+                                                    </div>
+                                                )}
+
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="destructive">
+                                                        Delete
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Confirm Deletion
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Are you sure you
+                                                            want to delete this
+                                                            history item? This
+                                                            action cannot be
+                                                            undone.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    item.id
+                                                                )
+                                                            }
+                                                            className="bg-red-600 hover:bg-red-700 text-white"
+                                                        >
+                                                            Delete
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
                     ))}
