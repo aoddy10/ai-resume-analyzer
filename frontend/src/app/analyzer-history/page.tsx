@@ -17,6 +17,7 @@ import {
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import JDMatcherViewDialog from "@/components/JDMatcherViewDialog";
+import ExportButton from "@/components/ExportButton";
 
 export default function AnalyzerHistoryPage() {
     const { getHistory, clearHistory } = useHistoryStore();
@@ -32,10 +33,6 @@ export default function AnalyzerHistoryPage() {
             console.log(typeof history[0].gptFeedback);
         }
     }, [history]);
-
-    const handleReanalyze = (item: ResumeHistoryItem) => {
-        alert(`Re-analyzing: ${item.filename}`);
-    };
 
     const handleDelete = (id: string) => {
         const updated = history.filter((item) => item.id !== id);
@@ -119,14 +116,25 @@ export default function AnalyzerHistoryPage() {
                                                     No feedback data available.
                                                 </p>
                                             )}
-                                            <Button
-                                                variant="secondary"
-                                                onClick={() =>
-                                                    handleReanalyze(item)
-                                                }
-                                            >
-                                                Re-analyze
-                                            </Button>
+
+                                            {gptFeedbackObj &&
+                                                gapFeedbackObj &&
+                                                item.matchScore && (
+                                                    <div className="my-1 sm:my-0 sm:mx-1">
+                                                        <ExportButton
+                                                            resumeFeedback={
+                                                                gptFeedbackObj
+                                                            }
+                                                            jdMatchFeedback={
+                                                                gapFeedbackObj
+                                                            }
+                                                            matchScore={
+                                                                item.matchScore
+                                                            }
+                                                        />
+                                                    </div>
+                                                )}
+
                                             <AlertDialog>
                                                 <AlertDialogTrigger asChild>
                                                     <Button variant="destructive">
