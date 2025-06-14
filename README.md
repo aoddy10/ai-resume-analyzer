@@ -11,16 +11,15 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ## Screenshot Preview
 
-Here's a quick look at the Resume Analyzer in action:
+Here’s a look at the full workflow of AI Resume Analyzer:
 
-<div style="display: flex; gap: 10px;">
-  <img src="frontend/public/screenshots/step1-upload-resume.png" alt="Step 1" width="250"/>
-  <img src="frontend/public/screenshots/step2-get-resume-feedback.png" alt="Step 2" width="250"/>
-  <img src="frontend/public/screenshots/step3-get-gap-feedback.png" alt="Step 3" width="250"/>
-</div>
-
-<div style="margin-top: 1rem;">
-  <img src="frontend/public/screenshots/darkmode-responsive.png" alt="Dark Mode & Responsive UI" width="520"/>
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="frontend/public/screenshots/1-homepage.png" alt="Homepage" width="300"/>
+  <img src="frontend/public/screenshots/2-upload-resume.png" alt="Upload Resume" width="300"/>
+  <img src="frontend/public/screenshots/3-get-resume-feedback.png" alt="Resume Feedback" width="300"/>
+  <img src="frontend/public/screenshots/4-jd-matcher.png" alt="Match JD" width="300"/>
+  <img src="frontend/public/screenshots/5-pdf-download.png" alt="Download PDF Result" width="300"/>
+  <img src="frontend/public/screenshots/6-analyzer-history.png" alt="History View" width="300"/>
 </div>
 
 ---

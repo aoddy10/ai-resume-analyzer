@@ -20,7 +20,7 @@ import JDMatcherViewDialog from "@/components/JDMatcherViewDialog";
 import ExportButton from "@/components/ExportButton";
 
 export default function AnalyzerHistoryPage() {
-    const { getHistory, clearHistory } = useHistoryStore();
+    const { getHistory } = useHistoryStore();
     const [history, setHistory] = useState<ResumeHistoryItem[]>([]);
 
     useEffect(() => {
