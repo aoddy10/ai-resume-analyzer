@@ -1,9 +1,8 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { AppThemeProvider } from "@/components/theme-provider";
-import { ThemeToggleButton } from "@/components/Theme-toggle-button";
+import Navbar from "@/components/Navbar";
+import { AppThemeProvider } from "@/components/Theme-provider";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -33,9 +32,7 @@ export default function RootLayout({
             >
                 <AppThemeProvider>
                     <div className="min-h-screen flex flex-col">
-                        <div className="flex justify-end p-4">
-                            <ThemeToggleButton />
-                        </div>
+                        <Navbar />
                         <main className="flex-1 w-full px-4 sm:px-6 md:px-8">
                             {children}
                         </main>

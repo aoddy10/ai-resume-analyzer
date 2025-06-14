@@ -14,7 +14,11 @@ import { FileText, CheckCircle, AlertTriangle } from "lucide-react";
 
 interface JDMatcherProps {
     resumeText: string;
-    onJDMatcherSuccess?: (gap_feedback: object, score: number | null) => void; // Update feedback to string[]
+    onJDMatcherSuccess?: (
+        fileName: string,
+        feedback: object,
+        score: number | null
+    ) => void; // Update feedback to string[]
 }
 
 const JDMatcher: React.FC<JDMatcherProps> = ({
@@ -56,7 +60,11 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
             setMatchScore(result?.match_score);
 
             if (onJDMatcherSuccess) {
-                onJDMatcherSuccess(result?.gap_feedback, result?.match_score); // Pass as string[]
+                onJDMatcherSuccess(
+                    jdFile.name,
+                    result?.gap_feedback,
+                    result?.match_score
+                ); // Pass as string[]
             }
         } catch (error) {
             console.error("Error in JDMatcher", error);
@@ -73,7 +81,7 @@ const JDMatcher: React.FC<JDMatcherProps> = ({
             <CardHeader>
                 <CardTitle>Step 2: Match with Job Description</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6 px-4 dark:px-0">
+            <CardContent className="space-y-6 sm:px-4 px-0">
                 <Card className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">

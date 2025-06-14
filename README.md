@@ -3,7 +3,7 @@
 A GPT-powered application that analyzes resumes, matches them against job descriptions, and provides improvement suggestions — using semantic search and natural language generation.
 
 ![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20OpenAI%20%7C%20TfidfVectorizer%20%7C%20Docker-blue)
-![Status](https://img.shields.io/badge/Status-Phase%203%20In%20Progress-yellow)
+![Status](https://img.shields.io/badge/Status-Phase%203%20Active-green)
 
 ---
 
@@ -11,12 +11,15 @@ A GPT-powered application that analyzes resumes, matches them against job descri
 
 ## Screenshot Preview
 
-Here's a quick look at the Resume Analyzer in action:
+Here’s a look at the full workflow of AI Resume Analyzer:
 
-<div style="display: flex; gap: 10px;">
-  <img src="frontend/public/screenshots/step1-upload-resume.png" alt="Step 1" width="250"/>
-  <img src="frontend/public/screenshots/step2-get-resume-feedback.png" alt="Step 2" width="250"/>
-  <img src="frontend/public/screenshots/step3-get-gap-feedback.png" alt="Step 3" width="250"/>
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="frontend/public/screenshots/1-homepage.png" alt="Homepage" width="300"/>
+  <img src="frontend/public/screenshots/2-upload-resume.png" alt="Upload Resume" width="300"/>
+  <img src="frontend/public/screenshots/3-get-resume-feedback.png" alt="Resume Feedback" width="300"/>
+  <img src="frontend/public/screenshots/4-jd-matcher.png" alt="Match JD" width="300"/>
+  <img src="frontend/public/screenshots/5-pdf-download.png" alt="Download PDF Result" width="300"/>
+  <img src="frontend/public/screenshots/6-analyzer-history.png" alt="History View" width="300"/>
 </div>
 
 ---
@@ -30,11 +33,21 @@ Here's a quick look at the Resume Analyzer in action:
 -   📁 Upload JD and resume for AI-based compatibility matching
 -   🧪 Fully tested backend with mocked GPT feedback
 -   💻 Modern, responsive frontend with Hero, Features, and Resume Upload sections
--   🌙 Dark Mode toggle with full Tailwind support and responsive layout adjustments
+-   🌙 Dark Mode toggle with full Tailwind support using `next-themes` and custom CSS variables
+-   📱 Responsive layout for desktop, tablet, and mobile with animated hamburger menu and ShadCN drawer
+-   📚 Resume Analysis History stored locally with View / Re-analyze / Delete functionality and confirmation dialog
 -   📦 Dockerized backend and frontend with shared environment support
 -   📤 Show real-time progress bar and loading state during file upload
 -   🧾 Preview uploaded PDF and display GPT feedback from backend
--   📥 Export GPT Feedback & Match Score เป็น PDF/Markdown
+-   📥 Export GPT Feedback & Match Score as PDF/Markdown
+-   📥 Download full history items as PDF or Markdown from the Resume History section
+
+## UI Features
+
+-   🌓 Use the top-right toggle in the Navbar to switch between Light and Dark Mode
+-   🧠 Analyzer History is saved in your browser (localStorage)
+-   📱 Responsive layout with animated hamburger menu and drawer
+-   📄 One-click download of previously analyzed resume feedback
 
 ---
 
@@ -68,7 +81,11 @@ Also returns extracted resume text and displays it in the frontend UI.
 {
     "filename": "Anirut_Puangkingkaew_Resume.pdf",
     "resume_text": "Anirut Puangkingkaew\nEmail: anirut.puangkingkaew@gmail.com...",
-    "gpt_feedback": "Strengths of the resume:\n- The resume is highly detailed...\n\nAreas for improvement:\n- The resume could benefit from a more structured layout..."
+    "resume_feedback": {
+        "strengths": ["..."],
+        "areas_for_improvement": ["..."],
+        "missing_information": ["..."]
+    }
 }
 ```
 
@@ -88,7 +105,13 @@ Match resume against a job description and receive suggestions.
 ```json
 {
     "match_score": 84.67,
-    "gap_feedback": "1. Highlight Agile Experience...\n2. Emphasize Cloud-Based AI Services Experience...\n3. Specify Soft Skills..."
+    "gap_feedback": {
+        "suggestions": [
+            "1. Highlight Agile Experience...",
+            "2. Emphasize Cloud-Based AI Services Experience...",
+            "3. Specify Soft Skills..."
+        ]
+    }
 }
 ```
 
@@ -148,6 +171,8 @@ ai-resume-analyzer/
 │   │   ├── main.py
 │   │   ├── routes/
 │   │   ├── services/
+│   │   ├── store/
+│   │   │   └── useHistoryStore.ts
 │   │   ├── tests/
 │   │   └── utils/
 ├── frontend/
