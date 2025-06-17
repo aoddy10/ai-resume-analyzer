@@ -1,6 +1,6 @@
 # AI Resume Analyzer
 
-A GPT-powered application that analyzes resumes, matches them against job descriptions, and provides improvement suggestions — using semantic search and natural language generation.
+A lightweight tool powered by GPT and traditional NLP that helps users analyze resumes and match them against job descriptions, with feedback and improvement suggestions.
 
 ![Tech Stack](https://img.shields.io/badge/Tech-FastAPI%20%7C%20OpenAI%20%7C%20TfidfVectorizer%20%7C%20Docker-blue)
 ![Status](https://img.shields.io/badge/Status-Phase%203%20Active-green)
@@ -66,14 +66,13 @@ Here’s a look at the full workflow of AI Resume Analyzer:
 
 ## Tech Stack
 
-| Layer                | Technology Stack                                                               |
-| -------------------- | ------------------------------------------------------------------------------ |
-| Frontend (UI/UX)     | Next.js (App Router), React, TypeScript, Tailwind CSS, ShadCN UI, Lucide Icons |
-| Backend / API        | FastAPI, Python, Docker, docker-compose                                        |
-| AI/NLP & Prompt      | OpenAI GPT-4, TfidfVectorizer, Cosine Similarity, LangChain PromptTemplate     |
-| Data/Vector Store    | PostgreSQL, PGVector, PyMuPDF, Unstructured.io                                 |
-| DevOps/Deploy        | GitHub Actions, Railway, Vercel, Fly.io (optional), Supabase (optional)        |
-| Testing/Productivity | Pytest, Monkeypatch, TestClient, Jest, Testing Library, Prettier, ESLint       |
+| Layer                  | Technology Stack                                                 |
+| ---------------------- | ---------------------------------------------------------------- |
+| Frontend (UI/UX)       | Next.js (App Router), React, TypeScript, Tailwind CSS, ShadCN UI |
+| Backend / API          | FastAPI, Python, Docker, docker-compose                          |
+| AI/NLP & Prompt        | OpenAI GPT-4, TfidfVectorizer                                    |
+| PDF Parsing            | PyMuPDF                                                          |
+| Testing / Productivity | Pytest, TestClient, Jest, Testing Library, Prettier, ESLint      |
 
 ## API Endpoints
 
@@ -160,23 +159,19 @@ Tests include:
 
 -   PDF parser validation
 
--   GPT feedback with monkeypatch
-
 -   JD matching and score accuracy
 
 -   Full upload & match flow
 
 ## Future Plans / Roadmap
 
--   ✅ Phase 1: Resume Upload → Extract + GPT Feedback
-
--   ✅ Phase 2: JD Upload → Match Score + Gap Feedback
-
--   ✅ Phase 3: Export Result + Dark Mode + History
-
--   ⏳ Phase 4: Dual LLM Mode (HuggingFace + OpenAI)
-
--   ⏳ Phase 5: Multi-resume Comparison & API Integration
+-   ✅ Core: Resume Upload → GPT Feedback
+-   ✅ JD Upload → Matching Score + GAP Analysis
+-   ✅ PDF/Markdown Export + Dark Mode + Local History
+-   🔄 Switchable LLM Mode (OpenAI or Hugging Face model)
+-   🔜 Resume Comparison (Multiple Uploads)
+-   🔜 Public Deploy on Vercel + Railway
+-   🔜 Add login & save analysis history via database
 
 ## Project Structure
 
@@ -219,10 +214,10 @@ docker-compose up --build
 
 ## Live Demo
 
-⚙️ Coming Soon — deploying on Vercel + Railway with dual LLM mode support.
+This project is currently deployed privately for testing purposes. A public demo version is planned in the near future.
 
 ## License
 
 MIT License © 2025 Anirut Puangkingkaew
 
-For any questions or feedback, feel free to contact me at: vobi69p@gmail.com
+For any questions or feedback, feel free to contact me at: anirut.puangkingkaew@gmail.com
